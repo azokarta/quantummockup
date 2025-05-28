@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup Оприходование товара</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f6f8; color: #333; }
+        .app-bar { background-color: #1976d2; color: white; padding: 15px 20px; font-size: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .container { display: flex; }
+        .sidebar { width: 240px; background-color: #fff; padding: 20px; border-right: 1px solid #e0e0e0; height: calc(100vh - 60px); /* Примерная высота AppBar */ }
+        .sidebar h3 { margin-top: 0; color: #1976d2; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { padding: 10px 0; cursor: pointer; }
+        .sidebar li.active { font-weight: bold; color: #1976d2; }
+        .main-content { flex-grow: 1; padding: 20px; }
+        .tabs { border-bottom: 1px solid #e0e0e0; margin-bottom: 20px; }
+        .tabs button { background: none; border: none; padding: 10px 15px; cursor: pointer; font-size: 1rem; color: #555; }
+        .tabs button.active { color: #1976d2; border-bottom: 2px solid #1976d2; font-weight: bold;}
+        .form-section, .list-section, .details-section { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;}
+        h1, h2, h3 { color: #3f51b5; /* MUI primary color like */ }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 768px) {
+            .form-grid { grid-template-columns: repeat(2, 1fr); }
+            .full-width { grid-column: span 2; }
+        }
+        .form-control { margin-bottom: 10px; }
+        .form-control label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
+        .form-control input[type="text"],
+        .form-control input[type="number"],
+        .form-control input[type="date"],
+        .form-control select,
+        .form-control textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .form-control textarea { min-height: 80px; }
+        .radio-group label { margin-right: 15px; font-size: 1rem;}
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .button-primary { background-color: #1976d2; color: white; }
+        .button-outlined { background-color: transparent; color: #1976d2; border: 1px solid #1976d2; }
+        .button-error-outlined { background-color: transparent; color: #d32f2f; border: 1px solid #d32f2f; }
+        .button-text { background-color: transparent; color: #1976d2; border: none; }
+        .delete-icon { color: #d32f2f; cursor: pointer; font-size: 1.2em; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #e0e0e0; padding: 10px; text-align: left; font-size: 0.9rem; }
+        th { background-color: #f5f5f5; font-weight: bold; }
+        tr.clickable-row:hover { background-color: #f9f9f9; cursor: pointer; }
+        .pagination { margin-top: 20px; text-align: center; }
+        .details-block { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .details-block:last-child { border-bottom: none; }
+        .details-block p { margin: 5px 0; }
+        .details-block strong { color: #555; min-width: 120px; display: inline-block;}
+        .sn-list { list-style: decimal; padding-left: 20px; max-height: 200px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 4px;}
+        .action-buttons { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-bar">
+        Система Учета (Next.js + Material UI)
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Меню</h3>
+            <ul>
+                <li>Дашборд</li>
+                <li class="active">Оприходовать товар</li>
+                <li>Справочники</li>
+                <li>Отчеты</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="tabs">
+                <button id="tabCreate" class="active" onclick="showSection('create')">Создать оприходование</button>
+                <button id="tabList" onclick="showSection('list')">Список оприходований</button>
+                <button id="tabDetails" onclick="showSection('details')" style="display:none;">Детали</button>
+            </div>
+
+            <!-- Секция 1: Создание оприходования -->
+            <section id="sectionCreate" class="form-section">
+                <h2>Новое оприходование товара</h2>
+                <div class="form-grid">
+                    <div class="form-control">
+                        <label for="company">Компания</label>
+                        <select id="company" name="company">
+                            <option value="">-- Выберите компанию --</option>
+                            <option value="1">ООО "Ромашка"</option>
+                            <option value="2">ИП "Василек"</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label for="warehouse">Склад</label>
+                        <select id="warehouse" name="warehouse">
+                            <option value="">-- Выберите склад --</option>
+                            <option value="a">Основной склад (Москва)</option>
+                            <option value="b">Склад №2 (СПб)</option>
+                        </select>
+                    </div>
+                    <div class="form-control full-width">
+                        <label for="product_select">Товар</label>
+                        <select id="product_select" name="product_select">
+                            <option value="">-- Выберите товар --</option>
+                            <option value="prod1">Ноутбук SuperModel X1</option>
+                            <option value="prod2">Смартфон BestPhone Z</option>
+                            <option value="prod3">Клавиатура ProKey</option>
+                            <option value="prod4">Мышь OptiClick M5</option>
+                        </select>
+                    </div>
+                    <div class="form-control full-width">
+                        <label>Учет по серийным номерам (СН):</label>
+                        <div class="radio-group">
+                            <input type="radio" id="sn_no" name="sn_type" value="no" checked onchange="toggleSnInput(false)">
+                            <label for="sn_no">Без серийных номеров</label>
+                            <input type="radio" id="sn_yes" name="sn_type" value="yes" onchange="toggleSnInput(true)">
+                            <label for="sn_yes">С серийными номерами (СН)</label>
+                        </div>
+                    </div>
+
+                    <div id="quantity_block" class="form-control">
+                        <label for="quantity">Количество</label>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1">
+                    </div>
+                    <div id="sn_block" class="form-control full-width" style="display: none;">
+                        <label for="serial_numbers">Серийные номера (каждый с новой строки)</label>
+                        <textarea id="serial_numbers" name="serial_numbers" rows="4" placeholder="SN0001
+SN0002
+SN0003"></textarea>
+                        <small>Обнаружено СН: <span id="sn_count">0</span></small>
+                    </div>
+                    
+                    <div class="form-control">
+                        <label for="posting_date">Дата размещения</label>
+                        <input type="date" id="posting_date" name="posting_date" value="2023-10-27">
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="button button-primary">Сохранить</button>
+                </div>
+            </section>
+
+            <!-- Секция 2: Список оприходований -->
+            <section id="sectionList" class="list-section" style="display: none;">
+                <h2>Список документов оприходования</h2>
+                <div class="form-grid" style="margin-bottom: 20px;">
+                    <div class="form-control">
+                        <label for="date_from">Период С</label>
+                        <input type="date" id="date_from" name="date_from">
+                    </div>
+                    <div class="form-control">
+                        <label for="date_to">Период По</label>
+                        <input type="date" id="date_to" name="date_to">
+                    </div>
+                    <div style="grid-column: span 2; align-self: flex-end;">
+                         <button class="button button-outlined">Применить фильтры</button>
+                         <button class="button button-text">Сбросить</button>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Документа</th>
+                            <th>Дата размещения</th>
+                            <th>Компания</th>
+                            <th>Склад</th>
+                            <th>Товар</th>
+                            <th>Общее кол-во</th>
+                            <th>Тип учета</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="clickable-row">
+                            <td onclick="showDocumentDetails(1, 'no_sn')">DOC-00123</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">2023-10-26</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">ООО "Ромашка"</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">Основной склад (Москва)</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">Ноутбук SuperModel X1</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">5</td>
+                            <td onclick="showDocumentDetails(1, 'no_sn')">Без СН</td>
+                            <td><span class="delete-icon" onclick="confirmDelete('DOC-00123')">🗑️</span></td>
+                        </tr>
+                        <tr class="clickable-row">
+                            <td onclick="showDocumentDetails(2, 'with_sn')">DOC-00124</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">2023-10-25</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">ИП "Василек"</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">Склад №2 (СПб)</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">Смартфон BestPhone Z</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">3</td>
+                            <td onclick="showDocumentDetails(2, 'with_sn')">С СН</td>
+                            <td><span class="delete-icon" onclick="confirmDelete('DOC-00124')">🗑️</span></td>
+                        </tr>
+                        <tr class="clickable-row">
+                            <td onclick="showDocumentDetails(3, 'no_sn')">DOC-00125</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">2023-10-24</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">ООО "Ромашка"</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">Основной склад (Москва)</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">Клавиатура ProKey</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">10</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">Без СН</td>
+                            <td><span class="delete-icon" onclick="confirmDelete('DOC-00125')">🗑️</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    < Пред. | 1 | 2 | 3 | След. >
+                </div>
+            </section>
+
+            <!-- Секция 3: Детали документа (пример) -->
+            <section id="sectionDetails" class="details-section" style="display: none;">
+                <h2 id="detailsTitle">Детали оприходования</h2>
+                 <div class="details-block">
+                    <h3>Основная информация</h3>
+                    <p><strong>Компания:</strong> <span id="detailCompany"></span></p>
+                    <p><strong>Склад:</strong> <span id="detailWarehouse"></span></p>
+                    <p><strong>Товар:</strong> <span id="detailProduct"></span></p>
+                    <p><strong>Дата размещения:</strong> <span id="detailDate"></span></p>
+                </div>
+
+                <div id="detailsQuantityInfo" class="details-block">
+                    <h3>Информация о количестве</h3>
+                    <!-- Заполняется скриптом -->
+                </div>
+
+                <div class="details-block">
+                    <h3>Аудит документа</h3>
+                    <p><strong>Дата создания:</strong> <span id="detailCreatedDate"></span></p>
+                    <p><strong>Кем создан:</strong> <span id="detailCreatedBy"></span></p>
+                    <p><strong>Дата изменения:</strong> <span id="detailModifiedDate"></span></p>
+                    <p><strong>Кем изменен:</strong> <span id="detailModifiedBy"></span></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="button button-outlined" onclick="showSection('list')">Назад к списку</button>
+                    <button class="button button-error-outlined" onclick="confirmDeleteDocumentDetails()">Удалить документ</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+<script>
+    const sections = ['create', 'list', 'details'];
+    const tabs = ['tabCreate', 'tabList', 'tabDetails'];
+    let currentDocIdForDetails = null; // Для запоминания ID открытого документа в деталях
+
+    function showSection(sectionIdToShow) {
+        sections.forEach(id => {
+            document.getElementById('section' + id.charAt(0).toUpperCase() + id.slice(1)).style.display = (id === sectionIdToShow) ? 'block' : 'none';
+        });
+        tabs.forEach(id => {
+            document.getElementById(id).classList.remove('active');
+        });
+        if (sectionIdToShow === 'create') document.getElementById('tabCreate').classList.add('active');
+        if (sectionIdToShow === 'list') document.getElementById('tabList').classList.add('active');
+    }
+
+    function toggleSnInput(showSn) {
+        document.getElementById('quantity_block').style.display = showSn ? 'none' : 'block';
+        document.getElementById('sn_block').style.display = showSn ? 'block' : 'none';
+        if (showSn) {
+            document.getElementById('serial_numbers').dispatchEvent(new Event('input'));
+        }
+    }
+    
+    const snTextarea = document.getElementById('serial_numbers');
+    const snCountSpan = document.getElementById('sn_count');
+    if (snTextarea) {
+        snTextarea.addEventListener('input', function() {
+            const lines = this.value.split('\n').filter(line => line.trim() !== '');
+            snCountSpan.textContent = lines.length;
+        });
+    }
+    
+    showSection('create');
+    document.getElementById('posting_date').valueAsDate = new Date();
+
+    function showDocumentDetails(docId, type) {
+        currentDocIdForDetails = `DOC-00${docId < 100 ? '0' : ''}${docId < 10 ? '0' : ''}${docId}`;
+        document.getElementById('detailsTitle').textContent = `Детали оприходования №${currentDocIdForDetails} от ${type === 'with_sn' ? '2023-10-25' : '2023-10-26'}`;
+        
+        const quantityInfoDiv = document.getElementById('detailsQuantityInfo').querySelector('h3').nextElementSibling || document.createElement('div');
+        if (!document.getElementById('detailsQuantityInfo').contains(quantityInfoDiv)) { // Если div еще не был добавлен
+            document.getElementById('detailsQuantityInfo').appendChild(quantityInfoDiv);
+        }
+        quantityInfoDiv.innerHTML = ''; 
+
+        // Примерные данные
+        let company, warehouse, product, date;
+        if (docId === 1) {
+            company = 'ООО "Ромашка"'; warehouse = 'Основной склад (Москва)'; product = 'Ноутбук SuperModel X1'; date = '2023-10-26';
+        } else if (docId === 2) {
+            company = 'ИП "Василек"'; warehouse = 'Склад №2 (СПб)'; product = 'Смартфон BestPhone Z'; date = '2023-10-25';
+        } else {
+            company = 'ООО "Ромашка"'; warehouse = 'Основной склад (Москва)'; product = 'Клавиатура ProKey'; date = '2023-10-24';
+        }
+        document.getElementById('detailCompany').textContent = company;
+        document.getElementById('detailWarehouse').textContent = warehouse;
+        document.getElementById('detailProduct').textContent = product;
+        document.getElementById('detailDate').textContent = date;
+
+        // Аудит инфо (пример)
+        document.getElementById('detailCreatedDate').textContent = date + " 10:30:00";
+        document.getElementById('detailCreatedBy').textContent = "Иванов И.И.";
+        document.getElementById('detailModifiedDate').textContent = date + " 11:00:00";
+        document.getElementById('detailModifiedBy').textContent = "Петров П.П.";
+
+
+        if (type === 'no_sn') {
+            const pProduct = document.createElement('p');
+            pProduct.innerHTML = `<strong>Товар:</strong> ${product}`;
+            const pQty = document.createElement('p');
+            pQty.innerHTML = `<strong>Количество:</strong> ${docId === 1 ? 5 : 10} шт.`;
+            quantityInfoDiv.appendChild(pProduct);
+            quantityInfoDiv.appendChild(pQty);
+        } else if (type === 'with_sn') {
+            const pProduct = document.createElement('p');
+            pProduct.innerHTML = `<strong>Товар:</strong> ${product}`;
+            const pTotalQty = document.createElement('p');
+            pTotalQty.innerHTML = `<strong>Общее количество (по СН):</strong> 3 шт.`;
+            const pSnTitle = document.createElement('p');
+            pSnTitle.innerHTML = `<strong>Список серийных номеров:</strong>`;
+            const ul = document.createElement('ul');
+            ul.className = 'sn-list';
+            ['SN-BEST-001', 'SN-BEST-002', 'SN-BEST-003'].forEach(sn => {
+                const li = document.createElement('li');
+                li.textContent = sn;
+                ul.appendChild(li);
+            });
+            quantityInfoDiv.appendChild(pProduct);
+            quantityInfoDiv.appendChild(pTotalQty);
+            quantityInfoDiv.appendChild(pSnTitle);
+            quantityInfoDiv.appendChild(ul);
+        }
+        showSection('details');
+    }
+
+    function confirmDelete(docId) {
+        if (confirm(`Вы уверены, что хотите удалить документ ${docId}?`)) {
+            alert(`Документ ${docId} удален (симуляция). В реальности здесь будет запрос к API.`);
+            // Тут можно добавить логику для удаления строки из таблицы (для мокапа)
+            // Например, найти tr с этим docId и удалить его.
+        }
+    }
+    function confirmDeleteDocumentDetails() {
+        if (currentDocIdForDetails) {
+            if (confirm(`Вы уверены, что хотите удалить документ ${currentDocIdForDetails}?`)) {
+                alert(`Документ ${currentDocIdForDetails} удален (симуляция). В реальности здесь будет запрос к API.`);
+                showSection('list'); // Вернуться к списку после удаления
+                // Тут можно добавить логику для удаления строки из таблицы (для мокапа)
+            }
+        } else {
+            alert("Ошибка: документ для удаления не определен.");
+        }
+    }
+
+</script>
+
+</body>
+</html>
