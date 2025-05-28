@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перемещение товара - Макет</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .mui-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2, h3 {
+            color: #1976d2; /* MUI Primary colorish */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mui-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #1976d2;
+        }
+
+        .mui-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            color: #555;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+
+        .mui-tab.active {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+            font-weight: bold;
+        }
+
+        .mui-tab:hover {
+            color: #1976d2;
+        }
+
+        .mui-paper {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .mui-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .filter-grid .mui-grid-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-grid .filter-buttons {
+            align-self: flex-end; 
+            gap: 10px;
+        }
+
+
+        .mui-grid-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mui-grid-item-fullwidth {
+            grid-column: 1 / -1; /* Span full width */
+        }
+
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .mui-textfield, .mui-select, .mui-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .mui-textfield:focus, .mui-select:focus, .mui-textarea:focus {
+            border-color: #1976d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        .mui-textfield[disabled] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        .mui-textarea {
+            resize: vertical;
+        }
+        .sn-textarea { 
+            min-height: 60px; 
+        }
+
+
+        .mui-button {
+            padding: 10px 15px;
+            font-size: 0.9em;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            border: 1px solid transparent;
+            margin-left: 5px; /* небольшой отступ для кнопок рядом */
+        }
+        .mui-button:first-child {
+            margin-left: 0;
+        }
+        .mui-button-contained {
+            background-color: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+        .mui-button-contained:hover {
+            background-color: #1565c0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .mui-button-outlined {
+            background-color: white;
+            color: #1976d2;
+            border-color: #1976d2;
+        }
+        .mui-button-outlined:hover {
+            background-color: rgba(25, 118, 210, 0.04);
+        }
+        .mui-button[disabled] {
+            background-color: #e0e0e0;
+            color: #9e9e9e;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+
+        .product-row {
+            display: grid; 
+            grid-template-columns: 2fr 1.5fr 1fr 2fr auto; 
+            align-items: start; 
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-row .sn-options { 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            padding-top: 25px; 
+        }
+        .product-row .remove-product-btn { 
+            padding: 5px 10px; 
+            align-self: center; 
+        }
+        .product-row .field-container { 
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .actions-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        #receiptConfirmationBlock {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px dashed #1976d2;
+            border-radius: 4px;
+            background-color: #e3f2fd60;
+        }
+        #receiptConfirmationBlock label {
+             margin-bottom: 8px;
+        }
+        #receiptConfirmationBlock .mui-textfield {
+            margin-bottom: 10px;
+        }
+
+
+        .feedback-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .feedback-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32; 
+            border: 1px solid #a5d6a7;
+        }
+        .feedback-message.error {
+            background-color: #ffebee; 
+            color: #c62828; 
+            border: 1px solid #ef9a9a;
+        }
+        .feedback-message.info {
+            background-color: #e3f2fd; 
+            color: #0d47a1; 
+            border: 1px solid #90caf9;
+        }
+        .sn-count-feedback {
+            font-size: 0.8em;
+            color: #555;
+            margin-top: 2px;
+        }
+         .sn-count-feedback.error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .mui-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .mui-table th, .mui-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .mui-table th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        .mui-table tbody tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+        .mui-table td a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+        .mui-table td a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="mui-container">
+        <h1>Перемещение товара</h1>
+
+        <div class="mui-tabs">
+            <button class="mui-tab active" onclick="showTab('createTransfer')">Создать перемещение</button>
+            <button class="mui-tab" onclick="showTab('documentList')">Список документов</button>
+        </div>
+
+        <div id="tabContent">
+            <!-- Содержимое активной вкладки будет загружено сюда JS -->
+        </div>
+    </div>
+
+    <!-- Шаблоны для вкладок -->
+    <template id="templateCreateTransfer">
+        <div class="mui-paper form-section">
+            <h2>Отправитель</h2>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item">
+                    <label for="senderCompany">Компания отправителя *</label>
+                    <select id="senderCompany" class="mui-select">
+                        <option value="">Выберите компанию</option>
+                        <option value="companyA">Компания А</option>
+                        <option value="companyB">Компания Б</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="senderWarehouse">Склад отправителя *</label>
+                    <select id="senderWarehouse" class="mui-select">
+                        <option value="">Выберите склад</option>
+                        <option value="whA1">Склад А1 (Компания А)</option>
+                        <option value="whB1">Склад Б1 (Компания Б)</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="senderLegalEntity">Юр. лицо отправителя *</label>
+                    <select id="senderLegalEntity" class="mui-select" onchange="updateSenderManager(this.value)">
+                        <option value="">Выберите юр. лицо</option>
+                        <option value="legalA">ООО "Ромашка"</option>
+                        <option value="legalB">ИП "Василек"</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="senderManager">Руководитель</label>
+                    <input type="text" id="senderManager" class="mui-textfield" value="Автозаполнение..." disabled>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="senderManagerPhone">Телефон руководителя</label>
+                    <input type="text" id="senderManagerPhone" class="mui-textfield" value="Автозаполнение..." disabled>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="dispatchDate">Дата отправления *</label>
+                    <input type="date" id="dispatchDate" class="mui-textfield">
+                </div>
+                <div class="mui-grid-item mui-grid-item-fullwidth">
+                    <label for="senderNote">Примечание к отправлению *</label>
+                    <textarea id="senderNote" class="mui-textarea" rows="3" placeholder="Обязательное поле"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="mui-paper form-section">
+            <h2>Получатель</h2>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item">
+                    <label for="receiverCompany">Компания получателя *</label>
+                    <select id="receiverCompany" class="mui-select">
+                        <option value="">Выберите компанию</option>
+                        <option value="companyA">Компания А</option>
+                        <option value="companyB">Компания Б</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="receiverWarehouse">Склад получателя *</label>
+                    <select id="receiverWarehouse" class="mui-select">
+                        <option value="">Выберите склад</option>
+                        <option value="whA2">Склад А2 (Компания А)</option>
+                        <option value="whB2">Склад Б2 (Компания Б)</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="receiverLegalEntity">Юр. лицо получателя *</label>
+                    <select id="receiverLegalEntity" class="mui-select" onchange="updateReceiverManager(this.value)">
+                        <option value="">Выберите юр. лицо</option>
+                        <option value="legalC">АО "Лютик"</option>
+                        <option value="legalD">ОАО "Фиалка"</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="receiverManager">Руководитель</label>
+                    <input type="text" id="receiverManager" class="mui-textfield" value="Автозаполнение..." disabled>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="receiverManagerPhone">Телефон руководителя</label>
+                    <input type="text" id="receiverManagerPhone" class="mui-textfield" value="Автозаполнение..." disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="mui-paper form-section">
+            <h2>Товары к перемещению</h2>
+            <div id="productsContainer">
+                <!-- Товары будут добавляться сюда JS -->
+            </div>
+            <button class="mui-button mui-button-outlined" onclick="addProductRow()">+ Добавить товар</button>
+        </div>
+
+        <div class="actions-section">
+            <button class="mui-button mui-button-outlined" onclick="generateAct()">Сформировать Акт приема-передачи</button>
+            <button class="mui-button mui-button-contained" onclick="saveTransfer()">Сохранить</button>
+        </div>
+        <div id="actionFeedback" class="feedback-message"></div>
+    </template>
+
+    <template id="templateDocumentList">
+        <div class="mui-paper form-section">
+            <h2>Фильтры</h2>
+            <div class="mui-grid-container filter-grid">
+                <div class="mui-grid-item">
+                    <label for="filterCompany">Компания</label>
+                    <select id="filterCompany" class="mui-select">
+                        <option value="">Все компании</option>
+                        <option value="companyA">Компания А</option>
+                        <option value="companyB">Компания Б</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="filterWarehouse">Склад</label>
+                    <select id="filterWarehouse" class="mui-select">
+                        <option value="">Все склады</option>
+                        <option value="whA1">Склад А1</option>
+                        <option value="whB2">Склад Б2</option>
+                    </select>
+                </div>
+                <div class="mui-grid-item">
+                    <label for="filterDateFrom">Период С</label>
+                    <input type="date" id="filterDateFrom" class="mui-textfield">
+                </div>
+                <div class="mui-grid-item">
+                    <label for="filterDateTo">Период По</label>
+                    <input type="date" id="filterDateTo" class="mui-textfield">
+                </div>
+                <div class="mui-grid-item filter-buttons">
+                    <button class="mui-button mui-button-contained" onclick="searchDocuments()">Найти</button>
+                    <button class="mui-button mui-button-outlined" onclick="resetFilters()">Сбросить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mui-paper form-section">
+            <h2>Найденные документы</h2>
+            <table class="mui-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Дата отпр.</th>
+                        <th>Отправитель</th>
+                        <th>Склад отпр.</th>
+                        <th>Подп.(О)</th>
+                        <th>Дата получ.</th>
+                        <th>Получатель</th>
+                        <th>Склад получ.</th>
+                        <th>Подп.(П)</th>
+                        <th>Ваша роль</th>
+                        <th>Примечание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- isCurrentUserReceiver, isReceivedByAnyone, isSignedByReceiver -->
+                    <tr onclick="showDocumentDetail('DOC001', true, false, false)">
+                        <td><a href="javascript:void(0);" onclick="event.stopPropagation(); showDocumentDetail('DOC001', true, false, false)">DOC001</a></td>
+                        <td>2023-10-01</td>
+                        <td>Компания А</td>
+                        <td>Склад А1</td>
+                        <td>Да</td>
+                        <td>-</td>
+                        <td>Компания Б</td>
+                        <td>Склад Б2</td>
+                        <td>Нет</td>
+                        <td>Получатель</td>
+                        <td>Срочно</td>
+                    </tr>
+                    <tr onclick="showDocumentDetail('DOC002', false, true, false)">
+                        <td><a href="javascript:void(0);" onclick="event.stopPropagation(); showDocumentDetail('DOC002', false, true, false)">DOC002</a></td>
+                        <td>2023-10-05</td>
+                        <td>Компания Б</td>
+                        <td>Склад Б1</td>
+                        <td>Да</td>
+                        <td>2023-10-06</td>
+                        <td>Компания А</td>
+                        <td>Склад А2</td>
+                        <td>Нет</td>
+                        <td>Отправитель</td>
+                        <td>Планово</td>
+                    </tr>
+                     <tr onclick="showDocumentDetail('DOC003', true, true, true)">
+                        <td><a href="javascript:void(0);" onclick="event.stopPropagation(); showDocumentDetail('DOC003', true, true, true)">DOC003</a></td>
+                        <td>2023-10-07</td>
+                        <td>Компания А</td>
+                        <td>Склад А1</td>
+                        <td>Да</td>
+                        <td>2023-10-08</td>
+                        <td>Компания Б</td>
+                        <td>Склад Б2</td>
+                        <td>Да</td>
+                        <td>Получатель</td>
+                        <td>Оборудование</td>
+                    </tr>
+                    <tr onclick="showDocumentDetail('DOC004', true, true, false)">
+                        <td><a href="javascript:void(0);" onclick="event.stopPropagation(); showDocumentDetail('DOC004', true, true, false)">DOC004</a></td>
+                        <td>2023-10-10</td>
+                        <td>Компания А</td>
+                        <td>Склад А1</td>
+                        <td>Да</td>
+                        <td>2023-10-11</td>
+                        <td>Компания Б</td>
+                        <td>Склад Б2</td>
+                        <td>Нет</td>
+                        <td>Получатель</td>
+                        <td>Запчасти</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="searchFeedback" class="feedback-message"></div>
+        </div>
+    </template>
+
+    <template id="templateDocumentDetail">
+        <div class="mui-paper form-section">
+            <h2 id="detailDocId">Детали документа №</h2>
+            <input type="hidden" id="currentDocId"> <!-- Для передачи docId в confirmReceipt -->
+            <div class="mui-grid-container">
+                <div class="mui-grid-item">
+                    <h3>Отправитель</h3>
+                    <p><strong>Компания:</strong> <span id="detailSenderCompany"></span></p>
+                    <p><strong>Склад:</strong> <span id="detailSenderWarehouse"></span></p>
+                    <p><strong>Юр. лицо:</strong> <span id="detailSenderLegal"></span></p>
+                    <p><strong>Руководитель:</strong> <span id="detailSenderManager"></span></p>
+                    <p><strong>Телефон:</strong> <span id="detailSenderPhone"></span></p>
+                    <p><strong>Дата отправления:</strong> <span id="detailDispatchDate"></span></p>
+                    <p><strong>Статус (Отпр.):</strong> <span id="detailSenderSignedStatus"></span></p>
+                </div>
+                <div class="mui-grid-item">
+                    <h3>Получатель</h3>
+                    <p><strong>Компания:</strong> <span id="detailReceiverCompany"></span></p>
+                    <p><strong>Склад:</strong> <span id="detailReceiverWarehouse"></span></p>
+                    <p><strong>Юр. лицо:</strong> <span id="detailReceiverLegal"></span></p>
+                    <p><strong>Руководитель:</strong> <span id="detailReceiverManager"></span></p>
+                    <p><strong>Телефон:</strong> <span id="detailReceiverPhone"></span></p>
+                    <p><strong>Дата получения:</strong> <span id="detailReceiptDate"></span></p>
+                    <p><strong>Статус (Получ.):</strong> <span id="detailReceiverSignedStatus"></span></p>
+                </div>
+            </div>
+
+            <div id="receiptConfirmationBlock" style="display:none;">
+                <h4>Подтверждение получения</h4>
+                <label for="receiptDateInput">Укажите дату получения *</label>
+                <input type="date" id="receiptDateInput" class="mui-textfield">
+                <button id="confirmReceiptButton" class="mui-button mui-button-contained" onclick="confirmReceipt()">Подтвердить получение</button>
+            </div>
+            
+            <div class="mui-grid-item mui-grid-item-fullwidth" style="margin-top: 20px;">
+                 <h3>Общее</h3>
+                 <p><strong>Примечание:</strong> <span id="detailNote"></span></p>
+            </div>
+
+            <h3>Товары в документе</h3>
+            <table class="mui-table">
+                <thead>
+                    <tr>
+                        <th>Наименование товара</th>
+                        <th>СН</th>
+                        <th>Количество</th>
+                    </tr>
+                </thead>
+                <tbody id="detailProductsTable">
+                    <!-- Данные о товарах -->
+                </tbody>
+            </table>
+
+            <h3>История документа</h3>
+            <p><strong>Дата создания:</strong> <span id="detailCreatedDate"></span></p>
+            <p><strong>Кем создан:</strong> <span id="detailCreatedBy"></span></p>
+            <p><strong>Дата изменения:</strong> <span id="detailModifiedDate"></span></p>
+            <p><strong>Кем изменен:</strong> <span id="detailModifiedBy"></span></p>
+
+            <div class="actions-section">
+                <button id="signButton" class="mui-button mui-button-contained" onclick="signDocument()">Подписать документ</button>
+                <button class="mui-button mui-button-outlined" onclick="printDocumentAct()">Распечатать Акт</button>
+                <button class="mui-button mui-button-outlined" onclick="showTab('documentList')">Назад к списку</button>
+            </div>
+            <div id="detailActionFeedback" class="feedback-message"></div>
+        </div>
+    </template>
+
+    <script>
+        const tabContentContainer = document.getElementById('tabContent');
+        const createTransferTemplate = document.getElementById('templateCreateTransfer').innerHTML;
+        const documentListTemplate = document.getElementById('templateDocumentList').innerHTML;
+        const documentDetailTemplate = document.getElementById('templateDocumentDetail').innerHTML;
+
+        let productRowCount = 0;
+        const MAX_SN_COUNT = 2000;
+
+        // Для симуляции состояния документов (добавим сюда информацию о получении)
+        // isReceived: факт получения (дата установлена)
+        // isSignedByReceiver: факт подписания получателем
+        let mockDocumentsState = {
+            'DOC001': { isReceived: false, isSignedByReceiver: false, actualReceiptDate: null },
+            'DOC002': { isReceived: true, isSignedByReceiver: false, actualReceiptDate: '2023-10-06' }, // Отправитель не может менять
+            'DOC003': { isReceived: true, isSignedByReceiver: true, actualReceiptDate: '2023-10-08' },
+            'DOC004': { isReceived: true, isSignedByReceiver: false, actualReceiptDate: '2023-10-11' }
+        };
+
+
+        const managerData = {
+            legalA: { name: "Иванов И.И.", phone: "+7 (900) 123-45-67" },
+            legalB: { name: "Петров П.П.", phone: "+7 (901) 234-56-78" },
+            legalC: { name: "Сидорова С.С.", phone: "+7 (902) 345-67-89" },
+            legalD: { name: "Кузнецов К.К.", phone: "+7 (903) 456-78-90" }
+        };
+
+        function showTab(tabName) {
+            document.querySelectorAll('.mui-tab').forEach(tab => tab.classList.remove('active'));
+            const activeTabButton = document.querySelector(`.mui-tab[onclick="showTab('${tabName}')"]`);
+            if (activeTabButton) {
+                 activeTabButton.classList.add('active');
+            }
+
+            if (tabName === 'createTransfer') {
+                tabContentContainer.innerHTML = createTransferTemplate;
+                const dispatchDateEl = document.getElementById('dispatchDate');
+                if (dispatchDateEl) dispatchDateEl.valueAsDate = new Date();
+                addProductRow(); 
+                updateActionFeedback('');
+            } else if (tabName === 'documentList') {
+                tabContentContainer.innerHTML = documentListTemplate;
+                updateSearchFeedback('');
+            } else if (tabName.startsWith('detail-')) { 
+                tabContentContainer.innerHTML = documentDetailTemplate;
+            }
+        }
+
+        function updateSenderManager(legalEntityValue) {
+            const managerField = document.getElementById('senderManager');
+            const phoneField = document.getElementById('senderManagerPhone');
+            if (legalEntityValue && managerData[legalEntityValue]) {
+                if(managerField) managerField.value = managerData[legalEntityValue].name;
+                if(phoneField) phoneField.value = managerData[legalEntityValue].phone;
+            } else {
+                if(managerField) managerField.value = "Автозаполнение...";
+                if(phoneField) phoneField.value = "Автозаполнение...";
+            }
+        }
+
+        function updateReceiverManager(legalEntityValue) {
+            const managerField = document.getElementById('receiverManager');
+            const phoneField = document.getElementById('receiverManagerPhone');
+            if (legalEntityValue && managerData[legalEntityValue]) {
+                if(managerField) managerField.value = managerData[legalEntityValue].name;
+                if(phoneField) phoneField.value = managerData[legalEntityValue].phone;
+            } else {
+                if(managerField) managerField.value = "Автозаполнение...";
+                if(phoneField) phoneField.value = "Автозаполнение...";
+            }
+        }
+
+        function addProductRow() {
+            const container = document.getElementById('productsContainer');
+            if (!container) return;
+
+            productRowCount++;
+            const productRowId = `productRow-${productRowCount}`;
+
+            const row = document.createElement('div');
+            row.className = 'product-row';
+            row.id = productRowId;
+            row.innerHTML = `
+                <div class="field-container">
+                    <label for="product-${productRowCount}">Товар</label>
+                    <select class="mui-select" id="product-${productRowCount}">
+                        <option value="">Выберите товар</option>
+                        <option value="prod1">Ноутбук MX-15</option>
+                        <option value="prod2">Монитор S24</option>
+                        <option value="prod3">Клавиатура K100</option>
+                    </select>
+                </div>
+                <div class="sn-options">
+                    <label><input type="radio" name="snOption-${productRowCount}" value="withSN" onchange="toggleSNFields('${productRowId}', true)"> С СН</label>
+                    <label><input type="radio" name="snOption-${productRowCount}" value="withoutSN" onchange="toggleSNFields('${productRowId}', false)" checked> Без СН</label>
+                </div>
+                <div class="field-container">
+                    <label for="quantity-${productRowCount}">Кол-во</label>
+                    <input type="number" class="mui-textfield quantity-field" placeholder="Кол-во" id="quantity-${productRowCount}" min="1" value="1">
+                </div>
+                <div class="field-container sn-input-container" style="display:none;">
+                    <label for="sn-${productRowCount}">Серийные номера</label>
+                    <textarea class="mui-textarea sn-textarea" placeholder="Каждый СН с новой строки (макс. ${MAX_SN_COUNT})" id="sn-${productRowCount}" rows="3" oninput="updateSNCount('${productRowId}')"></textarea>
+                    <div class="sn-count-feedback" id="sn-feedback-${productRowCount}"></div>
+                </div>
+                <button class="mui-button mui-button-outlined remove-product-btn" onclick="removeProductRow('${productRowId}')">Удалить</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function toggleSNFields(rowId, withSN) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+            const quantityField = row.querySelector('.quantity-field');
+            const snInputContainer = row.querySelector('.sn-input-container');
+            const snTextarea = row.querySelector('.sn-textarea'); 
+            const snFeedback = row.querySelector('.sn-count-feedback');
+
+            if (quantityField && snInputContainer && snTextarea && snFeedback) {
+                if (withSN) {
+                    quantityField.disabled = true;
+                    snInputContainer.style.display = 'flex'; 
+                    snInputContainer.style.flexDirection = 'column'; 
+                    updateSNCount(rowId); 
+                } else {
+                    quantityField.disabled = false;
+                    quantityField.value = 1; 
+                    snInputContainer.style.display = 'none'; 
+                    snTextarea.value = '';
+                    snFeedback.textContent = '';
+                    snFeedback.className = 'sn-count-feedback';
+                }
+            }
+        }
+
+        function updateSNCount(rowId) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+
+            const snTextarea = row.querySelector('.sn-textarea');
+            const quantityField = row.querySelector('.quantity-field');
+            const feedbackEl = row.querySelector('.sn-count-feedback');
+            if (!snTextarea || !quantityField || !feedbackEl) return;
+
+            const snOptionRadio = row.querySelector('input[name^="snOption-"][value="withSN"]');
+            if (!snOptionRadio || !snOptionRadio.checked) {
+                return; 
+            }
+
+            const snValues = snTextarea.value.split('\n')
+                               .map(sn => sn.trim())
+                               .filter(sn => sn !== '');
+            
+            let currentSnCount = snValues.length;
+            feedbackEl.className = 'sn-count-feedback';
+
+            if (currentSnCount > MAX_SN_COUNT) {
+                feedbackEl.textContent = `Превышен лимит! Введено ${currentSnCount}, макс. ${MAX_SN_COUNT}. Лишние СН не будут учтены.`;
+                feedbackEl.classList.add('error');
+                const validSnValues = snValues.slice(0, MAX_SN_COUNT);
+                snTextarea.value = validSnValues.join('\n'); 
+                currentSnCount = MAX_SN_COUNT; 
+            } else if (currentSnCount > 0) {
+                feedbackEl.textContent = `Введено СН: ${currentSnCount}`;
+            } else {
+                feedbackEl.textContent = '';
+            }
+
+            quantityField.value = currentSnCount;
+        }
+
+
+        function removeProductRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.remove();
+            }
+            const container = document.getElementById('productsContainer');
+            if (container && container.children.length === 0) {
+                addProductRow();
+            }
+        }
+
+        function generateAct() {
+            updateActionFeedback('Акт приема-передачи (PDF) сгенерирован (симуляция). <a href="javascript:void(0);" onclick="alert(\'Симуляция открытия PDF\')" target="_blank">Открыть PDF (симуляция)</a>', 'info');
+        }
+
+        function saveTransfer() {
+            const senderCompany = document.getElementById('senderCompany') ? document.getElementById('senderCompany').value : null;
+            const senderWarehouse = document.getElementById('senderWarehouse') ? document.getElementById('senderWarehouse').value : null;
+            const senderLegalEntity = document.getElementById('senderLegalEntity') ? document.getElementById('senderLegalEntity').value : null;
+            const dispatchDate = document.getElementById('dispatchDate') ? document.getElementById('dispatchDate').value : null;
+            const senderNote = document.getElementById('senderNote') ? document.getElementById('senderNote').value : null;
+            const receiverCompany = document.getElementById('receiverCompany') ? document.getElementById('receiverCompany').value : null;
+            
+            let allProductsValid = true;
+            document.querySelectorAll('.product-row').forEach(row => {
+                const productSelect = row.querySelector('select[id^="product-"]');
+                const productName = productSelect ? productSelect.selectedOptions[0].text : "Неизвестный товар";
+
+                if (productSelect && productSelect.value === "") { 
+                    updateActionFeedback(`Ошибка: Для одной из строк не выбран товар.`, 'error');
+                    allProductsValid = false;
+                    return; 
+                }
+
+                const snOptionRadio = row.querySelector('input[name^="snOption-"][value="withSN"]');
+                const quantityField = row.querySelector('.quantity-field');
+                const snTextarea = row.querySelector('.sn-textarea');
+
+                if (snOptionRadio && snOptionRadio.checked) { 
+                    const snCount = snTextarea.value.split('\n').map(s => s.trim()).filter(s => s !== '').length;
+                    if (snCount === 0) {
+                        updateActionFeedback(`Ошибка: Для товара "${productName}" не указаны серийные номера при выборе "С СН".`, 'error');
+                        allProductsValid = false;
+                    }
+                } else if (quantityField && (parseInt(quantityField.value, 10) <= 0 || isNaN(parseInt(quantityField.value, 10)))) {
+                     updateActionFeedback(`Ошибка: Для товара "${productName}" указано некорректное количество.`, 'error');
+                     allProductsValid = false;
+                }
+            });
+
+            if (!allProductsValid) return;
+
+            if (!senderCompany || !senderWarehouse || !senderLegalEntity || !dispatchDate || !senderNote || !receiverCompany) {
+                 updateActionFeedback('Ошибка: Заполните все обязательные поля (отмечены * в ТЗ)!', 'error');
+                 alert('Ошибка: Заполните все обязательные поля, отмеченные звездочкой в ТЗ (Компания, Склад, Юр.лицо отправителя, Дата отправления, Примечание, Компания получателя)!');
+                 return;
+            }
+
+            updateActionFeedback('Документ перемещения сохранен в базе (симуляция).', 'success');
+        }
+
+        function searchDocuments() {
+            updateSearchFeedback('Поиск выполнен (симуляция). Результаты могли бы быть обновлены здесь.', 'info');
+        }
+        function resetFilters() {
+            const filterCompanyEl = document.getElementById('filterCompany');
+            const filterWarehouseEl = document.getElementById('filterWarehouse');
+            const filterDateFromEl = document.getElementById('filterDateFrom');
+            const filterDateToEl = document.getElementById('filterDateTo');
+
+            if(filterCompanyEl) filterCompanyEl.value = "";
+            if(filterWarehouseEl) filterWarehouseEl.value = "";
+            if(filterDateFromEl) filterDateFromEl.value = "";
+            if(filterDateToEl) filterDateToEl.value = "";
+            updateSearchFeedback('Фильтры сброшены.', 'info');
+        }
+
+
+        function showDocumentDetail(docId, isCurrentUserReceiver, isReceivedByAnyone, isSignedByReceiverParam) {
+            tabContentContainer.innerHTML = documentDetailTemplate; 
+            
+            document.querySelectorAll('.mui-tab').forEach(tab => tab.classList.remove('active'));
+            const docListTab = document.querySelector(`.mui-tab[onclick="showTab('documentList')"]`);
+            if (docListTab) docListTab.classList.add('active');
+
+            // Используем состояние из mockDocumentsState для isReceived и isSignedByReceiver
+            const docState = mockDocumentsState[docId] || { isReceived: isReceivedByAnyone, isSignedByReceiver: isSignedByReceiverParam, actualReceiptDate: null };
+            
+            const currentDocIdInput = document.getElementById('currentDocId');
+            if(currentDocIdInput) currentDocIdInput.value = docId;
+
+
+            const detailDocIdEl = document.getElementById('detailDocId');
+            if(detailDocIdEl) detailDocIdEl.textContent = `Детали документа № ${docId}`;
+
+            const isSenderRole = docId === 'DOC002'; // Для определения, кто отправитель/получатель в данных по умолчанию
+
+            const dataMap = {
+                detailSenderCompany: isSenderRole ? "Компания Б" : "Компания А",
+                detailSenderWarehouse: isSenderRole ? "Склад Б1" : "Склад А1",
+                detailSenderLegal: isSenderRole ? "ИП 'Василек'" : "ООО 'Ромашка'",
+                detailSenderManager: isSenderRole ? managerData.legalB.name : managerData.legalA.name,
+                detailSenderPhone: isSenderRole ? managerData.legalB.phone : managerData.legalA.phone,
+                detailDispatchDate: isSenderRole ? "2023-10-05" : (docId === 'DOC004' ? "2023-10-10" : (docId === 'DOC003' ? "2023-10-07" : "2023-10-01")),
+                detailSenderSignedStatus: "Подписан " + (isSenderRole ? "2023-10-05 10:00" : (docId === 'DOC004' ? "2023-10-10 09:00" :(docId === 'DOC003' ? "2023-10-07 09:00" : "2023-10-01 09:00"))),
+
+                detailReceiverCompany: isSenderRole ? "Компания А" : "Компания Б",
+                detailReceiverWarehouse: isSenderRole ? "Склад А2" : "Склад Б2",
+                detailReceiverLegal: isSenderRole ? "АО 'Лютик'" : "ОАО 'Фиалка'",
+                detailReceiverManager: isSenderRole ? managerData.legalC.name : managerData.legalD.name,
+                detailReceiverPhone: isSenderRole ? managerData.legalC.phone : managerData.legalD.phone,
+                
+                detailNote: (docId === 'DOC001') ? "Срочно! Важный клиент." : (docId === 'DOC003' ? "Оборудование для нового офиса" : (docId === 'DOC004' ? "Запчасти срочно" : "Плановая поставка материалов")),
+                detailCreatedDate: (isSenderRole ? "2023-10-05 09:00" : (docId === 'DOC004' ? "2023-10-10 08:00" : (docId === 'DOC003' ? "2023-10-07 08:00" : "2023-10-01 09:00"))),
+                detailCreatedBy: (isSenderRole ? "user2@example.com" : "user1@example.com"),
+                detailModifiedDate: (isSenderRole ? "2023-10-05 09:30" : (docId === 'DOC004' ? "2023-10-10 08:30" : (docId === 'DOC003' ? "2023-10-07 08:30" : "2023-10-01 09:30"))),
+                detailModifiedBy: (isSenderRole ? "admin@example.com" : "admin@example.com")
+            };
+            
+            for (const id in dataMap) {
+                const element = document.getElementById(id);
+                if (element) element.textContent = dataMap[id];
+            }
+
+            const detailReceiptDateEl = document.getElementById('detailReceiptDate');
+            const receiptConfirmationBlock = document.getElementById('receiptConfirmationBlock');
+            const receiptDateInput = document.getElementById('receiptDateInput');
+
+            if (docState.isReceived) {
+                if(detailReceiptDateEl) detailReceiptDateEl.textContent = docState.actualReceiptDate || "Дата не указана";
+                if(receiptConfirmationBlock) receiptConfirmationBlock.style.display = 'none';
+            } else {
+                if(detailReceiptDateEl) detailReceiptDateEl.textContent = "Не получено";
+                if (isCurrentUserReceiver) {
+                    if(receiptConfirmationBlock) receiptConfirmationBlock.style.display = 'block';
+                    if(receiptDateInput) receiptDateInput.valueAsDate = new Date(); // Установить текущую дату по умолчанию
+                } else {
+                    if(receiptConfirmationBlock) receiptConfirmationBlock.style.display = 'none';
+                }
+            }
+            
+            const detailReceiverSignedStatusEl = document.getElementById('detailReceiverSignedStatus');
+            if (detailReceiverSignedStatusEl) {
+                 detailReceiverSignedStatusEl.textContent = docState.isSignedByReceiver ? `Подписан (дата симуляции)` : "Не подписан";
+            }
+
+
+            const productsTableBody = document.getElementById('detailProductsTable');
+            if (productsTableBody) {
+                productsTableBody.innerHTML = `
+                    <tr><td>Ноутбук MX-15</td><td>SN12345, SN12346</td><td>2</td></tr>
+                    <tr><td>Монитор S24</td><td>-</td><td>3</td></tr>
+                `;
+            }
+            
+            const signButton = document.getElementById('signButton');
+            if (signButton) {
+                // Кнопка "Подписать" активна, если пользователь - получатель, документ еще не подписан им, И (добавим условие) если товар уже получен
+                if (isCurrentUserReceiver && !docState.isSignedByReceiver && docState.isReceived) {
+                    signButton.disabled = false;
+                    signButton.textContent = "Подписать документ";
+                } else {
+                    signButton.disabled = true;
+                    signButton.textContent = docState.isSignedByReceiver ? "Документ подписан вами" : "Подписание не доступно";
+                }
+            }
+            updateDetailActionFeedback(''); 
+        }
+
+        function confirmReceipt() {
+            const docId = document.getElementById('currentDocId').value;
+            const receiptDateInput = document.getElementById('receiptDateInput');
+            const detailReceiptDateEl = document.getElementById('detailReceiptDate');
+            const receiptConfirmationBlock = document.getElementById('receiptConfirmationBlock');
+            const signButton = document.getElementById('signButton');
+
+
+            if (!receiptDateInput || !receiptDateInput.value) {
+                updateDetailActionFeedback('Пожалуйста, укажите дату получения.', 'error');
+                return;
+            }
+            const newReceiptDate = receiptDateInput.value;
+
+            // Симуляция сохранения
+            if (mockDocumentsState[docId]) {
+                mockDocumentsState[docId].isReceived = true;
+                mockDocumentsState[docId].actualReceiptDate = newReceiptDate;
+            }
+
+            if(detailReceiptDateEl) detailReceiptDateEl.textContent = newReceiptDate;
+            if(receiptConfirmationBlock) receiptConfirmationBlock.style.display = 'none';
+            updateDetailActionFeedback(`Получение документа ${docId} подтверждено датой ${newReceiptDate}.`, 'success');
+
+            // Обновить доступность кнопки "Подписать"
+            if (signButton && !mockDocumentsState[docId].isSignedByReceiver) { // Если еще не подписан
+                 signButton.disabled = false; // Теперь можно подписать
+                 signButton.textContent = "Подписать документ";
+            }
+        }
+
+
+        function signDocument() {
+            const docId = document.getElementById('currentDocId').value;
+            const signButton = document.getElementById('signButton');
+            const detailReceiverSignedStatusEl = document.getElementById('detailReceiverSignedStatus');
+
+            if (signButton) {
+                signButton.disabled = true;
+                signButton.textContent = "Документ подписан вами";
+            }
+            if (detailReceiverSignedStatusEl) {
+                detailReceiverSignedStatusEl.textContent = "Подписан (дата симуляции)";
+            }
+            // Симуляция обновления состояния
+            if (mockDocumentsState[docId]) {
+                mockDocumentsState[docId].isSignedByReceiver = true;
+            }
+
+            updateDetailActionFeedback('Документ успешно подписан вами (симуляция).', 'success');
+        }
+
+        function printDocumentAct() {
+            updateDetailActionFeedback('Акт для документа сгенерирован (симуляция). <a href="javascript:void(0);" onclick="alert(\'Симуляция открытия PDF\')" target="_blank">Открыть PDF (симуляция)</a>', 'info');
+        }
+
+        function updateActionFeedback(message, type = 'info') { 
+            const feedbackEl = document.getElementById('actionFeedback');
+            if(feedbackEl) {
+                feedbackEl.innerHTML = message;
+                feedbackEl.className = 'feedback-message'; 
+                if (type) feedbackEl.classList.add(type);
+            }
+        }
+        function updateSearchFeedback(message, type = 'info') {
+            const feedbackEl = document.getElementById('searchFeedback');
+             if(feedbackEl) {
+                feedbackEl.innerHTML = message;
+                feedbackEl.className = 'feedback-message';
+                if (type) feedbackEl.classList.add(type);
+            }
+        }
+        function updateDetailActionFeedback(message, type = 'info') {
+            const feedbackEl = document.getElementById('detailActionFeedback');
+             if(feedbackEl) {
+                feedbackEl.innerHTML = message;
+                feedbackEl.className = 'feedback-message';
+                if (type) feedbackEl.classList.add(type);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('createTransfer');
+        });
+    </script>
+</body>
+</html>

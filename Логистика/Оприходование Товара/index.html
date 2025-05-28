@@ -8,7 +8,7 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f6f8; color: #333; }
         .app-bar { background-color: #1976d2; color: white; padding: 15px 20px; font-size: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .container { display: flex; }
-        .sidebar { width: 240px; background-color: #fff; padding: 20px; border-right: 1px solid #e0e0e0; height: calc(100vh - 60px); /* Примерная высота AppBar */ }
+        .sidebar { width: 240px; background-color: #fff; padding: 20px; border-right: 1px solid #e0e0e0; height: calc(100vh - 60px); }
         .sidebar h3 { margin-top: 0; color: #1976d2; }
         .sidebar ul { list-style: none; padding: 0; }
         .sidebar li { padding: 10px 0; cursor: pointer; }
@@ -18,12 +18,33 @@
         .tabs button { background: none; border: none; padding: 10px 15px; cursor: pointer; font-size: 1rem; color: #555; }
         .tabs button.active { color: #1976d2; border-bottom: 2px solid #1976d2; font-weight: bold;}
         .form-section, .list-section, .details-section { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;}
-        h1, h2, h3 { color: #3f51b5; /* MUI primary color like */ }
+        h1, h2, h3 { color: #3f51b5; }
+        
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 768px) {
+        @media (min-width: 768px) { /* Для формы создания */
             .form-grid { grid-template-columns: repeat(2, 1fr); }
             .full-width { grid-column: span 2; }
         }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        @media (min-width: 768px) { 
+            .filters-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+         @media (min-width: 1200px) { 
+            .filters-grid { grid-template-columns: repeat(4, 1fr); }
+            .filters-grid .buttons-container { grid-column: span 4; text-align: right; }
+        }
+         .filters-grid .buttons-container { 
+            grid-column: 1 / -1; 
+            text-align: right; 
+            margin-top: 10px; 
+        }
+
         .form-control { margin-bottom: 10px; }
         .form-control label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #666; }
         .form-control input[type="text"],
@@ -38,6 +59,10 @@
             box-sizing: border-box;
             font-size: 1rem;
         }
+        .form-control select:disabled {
+            background-color: #eeeeee;
+            cursor: not-allowed;
+        }
         .form-control textarea { min-height: 80px; }
         .radio-group label { margin-right: 15px; font-size: 1rem;}
         .button {
@@ -49,6 +74,7 @@
             margin-top: 10px;
             margin-right: 10px;
         }
+        .button:last-child { margin-right: 0; }
         .button-primary { background-color: #1976d2; color: white; }
         .button-outlined { background-color: transparent; color: #1976d2; border: 1px solid #1976d2; }
         .button-error-outlined { background-color: transparent; color: #d32f2f; border: 1px solid #d32f2f; }
@@ -58,7 +84,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #e0e0e0; padding: 10px; text-align: left; font-size: 0.9rem; }
         th { background-color: #f5f5f5; font-weight: bold; }
-        tr.clickable-row:hover { background-color: #f9f9f9; cursor: pointer; }
+        tr.clickable-row > td:not(:last-child):hover { background-color: #f9f9f9; cursor: pointer; }
         .pagination { margin-top: 20px; text-align: center; }
         .details-block { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
         .details-block:last-child { border-bottom: none; }
@@ -92,21 +118,21 @@
                 <button id="tabDetails" onclick="showSection('details')" style="display:none;">Детали</button>
             </div>
 
-            <!-- Секция 1: Создание оприходования -->
+            <!-- Секция 1: Создание оприходования (без изменений) -->
             <section id="sectionCreate" class="form-section">
                 <h2>Новое оприходование товара</h2>
                 <div class="form-grid">
                     <div class="form-control">
-                        <label for="company">Компания</label>
-                        <select id="company" name="company">
+                        <label for="company_create">Компания</label>
+                        <select id="company_create" name="company_create">
                             <option value="">-- Выберите компанию --</option>
                             <option value="1">ООО "Ромашка"</option>
                             <option value="2">ИП "Василек"</option>
                         </select>
                     </div>
                     <div class="form-control">
-                        <label for="warehouse">Склад</label>
-                        <select id="warehouse" name="warehouse">
+                        <label for="warehouse_create">Склад</label>
+                        <select id="warehouse_create" name="warehouse_create">
                             <option value="">-- Выберите склад --</option>
                             <option value="a">Основной склад (Москва)</option>
                             <option value="b">Склад №2 (СПб)</option>
@@ -154,25 +180,41 @@ SN0003"></textarea>
                 </div>
             </section>
 
-            <!-- Секция 2: Список оприходований -->
+            <!-- Секция 2: Список оприходований (измененный порядок фильтров и логика склада) -->
             <section id="sectionList" class="list-section" style="display: none;">
                 <h2>Список документов оприходования</h2>
-                <div class="form-grid" style="margin-bottom: 20px;">
+                <div class="filters-grid">
                     <div class="form-control">
-                        <label for="date_from">Период С</label>
-                        <input type="date" id="date_from" name="date_from">
+                        <label for="filter_company">Компания</label>
+                        <select id="filter_company" name="filter_company" onchange="updateWarehouseFilter()">
+                            <option value="">Все компании</option>
+                            <option value="1">ООО "Ромашка"</option>
+                            <option value="2">ИП "Василек"</option>
+                        </select>
                     </div>
                     <div class="form-control">
-                        <label for="date_to">Период По</label>
-                        <input type="date" id="date_to" name="date_to">
+                        <label for="filter_warehouse">Склад</label>
+                        <select id="filter_warehouse" name="filter_warehouse" disabled>
+                            <option value="">-- Выберите склад --</option>
+                            <!-- Опции будут добавлены JS -->
+                        </select>
                     </div>
-                    <div style="grid-column: span 2; align-self: flex-end;">
+                    <div class="form-control">
+                        <label for="filter_date_from">Период С</label>
+                        <input type="date" id="filter_date_from" name="filter_date_from">
+                    </div>
+                    <div class="form-control">
+                        <label for="filter_date_to">Период По</label>
+                        <input type="date" id="filter_date_to" name="filter_date_to">
+                    </div>
+                    <div class="buttons-container">
                          <button class="button button-outlined">Применить фильтры</button>
-                         <button class="button button-text">Сбросить</button>
+                         <button class="button button-text" onclick="resetFilters()">Сбросить</button>
                     </div>
                 </div>
                 
                 <table>
+                    <!-- Таблица без изменений -->
                     <thead>
                         <tr>
                             <th>ID Документа</th>
@@ -210,7 +252,7 @@ SN0003"></textarea>
                             <td onclick="showDocumentDetails(3, 'no_sn')">DOC-00125</td>
                             <td onclick="showDocumentDetails(3, 'no_sn')">2023-10-24</td>
                             <td onclick="showDocumentDetails(3, 'no_sn')">ООО "Ромашка"</td>
-                            <td onclick="showDocumentDetails(3, 'no_sn')">Основной склад (Москва)</td>
+                            <td onclick="showDocumentDetails(3, 'no_sn')">Доп. склад (Казань)</td>
                             <td onclick="showDocumentDetails(3, 'no_sn')">Клавиатура ProKey</td>
                             <td onclick="showDocumentDetails(3, 'no_sn')">10</td>
                             <td onclick="showDocumentDetails(3, 'no_sn')">Без СН</td>
@@ -223,7 +265,7 @@ SN0003"></textarea>
                 </div>
             </section>
 
-            <!-- Секция 3: Детали документа (пример) -->
+            <!-- Секция 3: Детали документа (без изменений) -->
             <section id="sectionDetails" class="details-section" style="display: none;">
                 <h2 id="detailsTitle">Детали оприходования</h2>
                  <div class="details-block">
@@ -236,7 +278,6 @@ SN0003"></textarea>
 
                 <div id="detailsQuantityInfo" class="details-block">
                     <h3>Информация о количестве</h3>
-                    <!-- Заполняется скриптом -->
                 </div>
 
                 <div class="details-block">
@@ -259,7 +300,19 @@ SN0003"></textarea>
 <script>
     const sections = ['create', 'list', 'details'];
     const tabs = ['tabCreate', 'tabList', 'tabDetails'];
-    let currentDocIdForDetails = null; // Для запоминания ID открытого документа в деталях
+    let currentDocIdForDetails = null; 
+
+    // Данные для складов (симуляция)
+    const warehousesData = {
+        "1": [ // ООО "Ромашка"
+            { id: "a", name: "Основной склад (Москва)" },
+            { id: "c", name: "Доп. склад (Казань)" }
+        ],
+        "2": [ // ИП "Василек"
+            { id: "b", name: "Склад №2 (СПб)" },
+            { id: "d", name: "Филиал (Екатеринбург)"}
+        ]
+    };
 
     function showSection(sectionIdToShow) {
         sections.forEach(id => {
@@ -290,46 +343,76 @@ SN0003"></textarea>
     }
     
     showSection('create');
-    document.getElementById('posting_date').valueAsDate = new Date();
+    document.getElementById('posting_date').valueAsDate = new Date(); 
+
+    function updateWarehouseFilter() {
+        const companySelect = document.getElementById('filter_company');
+        const warehouseSelect = document.getElementById('filter_warehouse');
+        const selectedCompanyId = companySelect.value;
+
+        warehouseSelect.innerHTML = '<option value="">-- Выберите склад --</option>'; // Очистка и добавление плейсхолдера
+
+        if (selectedCompanyId && warehousesData[selectedCompanyId]) {
+            warehouseSelect.disabled = false;
+            warehousesData[selectedCompanyId].forEach(warehouse => {
+                const option = document.createElement('option');
+                option.value = warehouse.id;
+                option.textContent = warehouse.name;
+                warehouseSelect.appendChild(option);
+            });
+        } else {
+            warehouseSelect.disabled = true; // Деактивировать, если компания не выбрана или нет складов
+        }
+    }
+    
+    function resetFilters() {
+        document.getElementById('filter_company').value = "";
+        document.getElementById('filter_warehouse').innerHTML = '<option value="">-- Выберите склад --</option>';
+        document.getElementById('filter_warehouse').disabled = true;
+        document.getElementById('filter_date_from').value = "";
+        document.getElementById('filter_date_to').value = "";
+        // Здесь можно добавить логику для перезагрузки списка с дефолтными значениями
+        alert("Фильтры сброшены (симуляция)");
+    }
+
+    // Инициализация состояния фильтра складов при первой загрузке
+    updateWarehouseFilter();
+
 
     function showDocumentDetails(docId, type) {
         currentDocIdForDetails = `DOC-00${docId < 100 ? '0' : ''}${docId < 10 ? '0' : ''}${docId}`;
         document.getElementById('detailsTitle').textContent = `Детали оприходования №${currentDocIdForDetails} от ${type === 'with_sn' ? '2023-10-25' : '2023-10-26'}`;
         
-        const quantityInfoDiv = document.getElementById('detailsQuantityInfo').querySelector('h3').nextElementSibling || document.createElement('div');
-        if (!document.getElementById('detailsQuantityInfo').contains(quantityInfoDiv)) { // Если div еще не был добавлен
-            document.getElementById('detailsQuantityInfo').appendChild(quantityInfoDiv);
+        let quantityInfoContainer = document.getElementById('detailsQuantityInfo');
+        while (quantityInfoContainer.children.length > 1) {
+            quantityInfoContainer.removeChild(quantityInfoContainer.lastChild);
         }
-        quantityInfoDiv.innerHTML = ''; 
-
-        // Примерные данные
+        
         let company, warehouse, product, date;
         if (docId === 1) {
             company = 'ООО "Ромашка"'; warehouse = 'Основной склад (Москва)'; product = 'Ноутбук SuperModel X1'; date = '2023-10-26';
         } else if (docId === 2) {
             company = 'ИП "Василек"'; warehouse = 'Склад №2 (СПб)'; product = 'Смартфон BestPhone Z'; date = '2023-10-25';
-        } else {
-            company = 'ООО "Ромашка"'; warehouse = 'Основной склад (Москва)'; product = 'Клавиатура ProKey'; date = '2023-10-24';
+        } else { // DOC-00125
+            company = 'ООО "Ромашка"'; warehouse = 'Доп. склад (Казань)'; product = 'Клавиатура ProKey'; date = '2023-10-24';
         }
         document.getElementById('detailCompany').textContent = company;
         document.getElementById('detailWarehouse').textContent = warehouse;
         document.getElementById('detailProduct').textContent = product;
         document.getElementById('detailDate').textContent = date;
 
-        // Аудит инфо (пример)
         document.getElementById('detailCreatedDate').textContent = date + " 10:30:00";
         document.getElementById('detailCreatedBy').textContent = "Иванов И.И.";
         document.getElementById('detailModifiedDate').textContent = date + " 11:00:00";
         document.getElementById('detailModifiedBy').textContent = "Петров П.П.";
 
-
         if (type === 'no_sn') {
             const pProduct = document.createElement('p');
             pProduct.innerHTML = `<strong>Товар:</strong> ${product}`;
             const pQty = document.createElement('p');
-            pQty.innerHTML = `<strong>Количество:</strong> ${docId === 1 ? 5 : 10} шт.`;
-            quantityInfoDiv.appendChild(pProduct);
-            quantityInfoDiv.appendChild(pQty);
+            pQty.innerHTML = `<strong>Количество:</strong> ${docId === 1 ? 5 : (docId === 3 ? 10 : 0)} шт.`; // Корректировка кол-ва для DOC-00125
+            quantityInfoContainer.appendChild(pProduct);
+            quantityInfoContainer.appendChild(pQty);
         } else if (type === 'with_sn') {
             const pProduct = document.createElement('p');
             pProduct.innerHTML = `<strong>Товар:</strong> ${product}`;
@@ -344,33 +427,29 @@ SN0003"></textarea>
                 li.textContent = sn;
                 ul.appendChild(li);
             });
-            quantityInfoDiv.appendChild(pProduct);
-            quantityInfoDiv.appendChild(pTotalQty);
-            quantityInfoDiv.appendChild(pSnTitle);
-            quantityInfoDiv.appendChild(ul);
+            quantityInfoContainer.appendChild(pProduct);
+            quantityInfoContainer.appendChild(pTotalQty);
+            quantityInfoContainer.appendChild(pSnTitle);
+            quantityInfoContainer.appendChild(ul);
         }
         showSection('details');
     }
 
     function confirmDelete(docId) {
         if (confirm(`Вы уверены, что хотите удалить документ ${docId}?`)) {
-            alert(`Документ ${docId} удален (симуляция). В реальности здесь будет запрос к API.`);
-            // Тут можно добавить логику для удаления строки из таблицы (для мокапа)
-            // Например, найти tr с этим docId и удалить его.
+            alert(`Документ ${docId} удален (симуляция).`);
         }
     }
     function confirmDeleteDocumentDetails() {
         if (currentDocIdForDetails) {
             if (confirm(`Вы уверены, что хотите удалить документ ${currentDocIdForDetails}?`)) {
-                alert(`Документ ${currentDocIdForDetails} удален (симуляция). В реальности здесь будет запрос к API.`);
-                showSection('list'); // Вернуться к списку после удаления
-                // Тут можно добавить логику для удаления строки из таблицы (для мокапа)
+                alert(`Документ ${currentDocIdForDetails} удален (симуляция).`);
+                showSection('list'); 
             }
         } else {
             alert("Ошибка: документ для удаления не определен.");
         }
     }
-
 </script>
 
 </body>
