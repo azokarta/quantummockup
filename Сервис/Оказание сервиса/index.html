@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сервис - Макет</title>
+    <style>
+        body { font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif; margin: 0; background-color: #f5f5f5; color: #333; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 8px; }
+
+        /* MUI-like Tabs */
+        .mui-tabs { border-bottom: 1px solid #e0e0e0; margin-bottom: 20px; display: flex; }
+        .mui-tab { padding: 12px 24px; cursor: pointer; border-bottom: 2px solid transparent; color: #555; font-weight: 500; transition: all 0.3s ease; }
+        .mui-tab:hover { background-color: #f0f0f0; }
+        .mui-tab.active { color: #1976d2; border-bottom-color: #1976d2; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* MUI-like Card/Paper */
+        .mui-paper { padding: 16px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); margin-bottom: 20px; }
+
+        /* MUI-like Typography */
+        .mui-typography-h5 { font-size: 1.5rem; font-weight: 400; margin-bottom: 16px; }
+        .mui-typography-subtitle1 { font-size: 1rem; font-weight: 500; margin-bottom: 12px; }
+
+        /* MUI-like Grid (simplified) */
+        .mui-grid-container { display: flex; flex-wrap: wrap; margin: -8px; /* for spacing */ }
+        .mui-grid-item { padding: 8px; box-sizing: border-box; }
+        .mui-grid-item.xs12 { width: 100%; }
+        .mui-grid-item.xs6 { width: 50%; }
+        .mui-grid-item.md1 { width: calc(100% / 12); }
+        .mui-grid-item.md2 { width: calc(100% / 12 * 2); }
+        .mui-grid-item.md3 { width: calc(100% / 12 * 3); }
+        .mui-grid-item.md4 { width: calc(100% / 12 * 4); }
+        .mui-grid-item.md6 { width: 50%; }
+        @media (max-width: 960px) { /* md breakpoint approx */
+            .mui-grid-item.md1, .mui-grid-item.md2, .mui-grid-item.md3, .mui-grid-item.md4, .mui-grid-item.md6 {
+                width: 100%; /* Stack on smaller screens */
+            }
+        }
+        @media (max-width: 600px) { /* sm breakpoint approx */
+            .mui-grid-item.sm1 { width: calc(100% / 12); }
+            .mui-grid-item.sm2 { width: calc(100% / 12 * 2); }
+            .mui-grid-item.sm4 { width: calc(100% / 12 * 4); }
+            .mui-grid-item.xs6 { width: 50%; }
+            .mui-grid-item.xs12 { width: 100%; }
+        }
+
+
+        /* MUI-like Form Controls */
+        .mui-form-control { margin-bottom: 16px; width: 100%; }
+        .mui-form-control label { display: block; font-size: 0.9rem; color: #757575; margin-bottom: 4px; }
+        .mui-form-control input[type="text"],
+        .mui-form-control input[type="date"],
+        .mui-form-control input[type="number"],
+        .mui-form-control select,
+        .mui-form-control textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdbdbd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .mui-form-control input:disabled,
+        .mui-form-control select:disabled,
+        .mui-form-control textarea:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        .mui-form-control textarea { min-height: 80px; resize: vertical; }
+
+        /* MUI-like Button */
+        .mui-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            margin-right: 8px; margin-bottom: 8px;
+        }
+        .mui-button-contained-primary { background-color: #1976d2; color: white; }
+        .mui-button-contained-primary:hover { background-color: #1565c0; }
+        .mui-button-outlined { background-color: transparent; color: #1976d2; border: 1px solid #1976d2; }
+        .mui-button-outlined:hover { background-color: rgba(25, 118, 210, 0.08); }
+        .mui-button-text { background-color: transparent; color: #1976d2; border: none; }
+        .mui-button-text:hover { background-color: rgba(25, 118, 210, 0.08); }
+        .mui-icon-button { background: none; border: none; padding: 6px; cursor: pointer; color: #757575; }
+        .mui-icon-button:hover { color: #d32f2f; }
+
+        /* MUI-like Table */
+        .mui-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .mui-table th, .mui-table td { padding: 12px; border: 1px solid #e0e0e0; text-align: left; }
+        .mui-table th { background-color: #f5f5f5; font-weight: 500; }
+        .mui-table tbody tr:hover { background-color: #f9f9f9; cursor: pointer; }
+
+        .hidden { display: none !important; }
+        .actions-panel { margin-top: 20px; text-align: right; }
+        .line-item-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 10px; border: 1px dashed #eee; border-radius: 4px;}
+        .line-item-row .mui-form-control { margin-bottom: 0; } /* Reset margin for inline items */
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mui-typography-h5" style="text-align: center; color: #1976d2; margin-bottom: 25px;">Раздел "Сервис"</h1>
+
+    <div class="mui-tabs">
+        <div class="mui-tab active" data-tab="tab-search-contract">Поиск договора</div>
+        <div class="mui-tab" data-tab="tab-service-form">Создать/Редактировать сервис</div>
+        <div class="mui-tab" data-tab="tab-service-list">Список сервисов</div>
+    </div>
+
+    <!-- Tab 1: Поиск договора -->
+    <div id="tab-search-contract" class="tab-content active">
+        <div class="mui-paper">
+            <h2 class="mui-typography-h5">Поиск договора</h2>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="search-company">Компания</label>
+                        <select id="search-company">
+                            <option value="">Не выбрано</option>
+                            <option value="1">ООО "Рога и Копыта"</option>
+                            <option value="2">ИП "Лучший Сервис"</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="search-branch">Филиал</label>
+                        <select id="search-branch">
+                            <option value="">Не выбрано</option>
+                            <option value="101">Филиал №1 (Москва)</option>
+                            <option value="102">Филиал №2 (СПб)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="search-term">СН, Телефон или ФИО клиента</label>
+                        <input type="text" id="search-term" placeholder="Введите для поиска...">
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12">
+                    <button id="btn-apply-contract-search" class="mui-button mui-button-contained-primary">Применить</button>
+                </div>
+            </div>
+
+            <div id="contract-search-results" class="hidden" style="margin-top: 20px;">
+                <h3 class="mui-typography-subtitle1">Результаты поиска:</h3>
+                <table class="mui-table">
+                    <thead>
+                    <tr>
+                        <th>№ Договора</th>
+                        <th>Клиент</th>
+                        <th>Товар</th>
+                        <th>СН</th>
+                        <th>Дата продажи</th>
+                        <th>Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Пример строки, будет добавлено JS -->
+                    </tbody>
+                </table>
+                <p id="no-contracts-found" class="hidden">Договоры не найдены.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Создать/Редактировать сервис -->
+    <div id="tab-service-form" class="tab-content">
+        <div class="mui-paper">
+            <h2 id="service-form-title" class="mui-typography-h5">Создание нового сервиса</h2>
+
+            <h3 class="mui-typography-subtitle1">Информация из договора</h3>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-contract-product">Товар (из договора)</label>
+                        <input type="text" id="service-contract-product" disabled>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-contract-sn">СН (из договора)</label>
+                        <input type="text" id="service-contract-sn" disabled>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-contract-saledate">Дата продажи (из договора)</label>
+                        <input type="date" id="service-contract-saledate" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mui-typography-subtitle1">Приемка товара</h3>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item xs12 md6">
+                    <div class="mui-form-control">
+                        <label for="service-accept-date">Дата принятия в сервис *</label>
+                        <input type="date" id="service-accept-date">
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md6">
+                    <div class="mui-form-control">
+                        <label for="service-master">Мастер</label>
+                        <select id="service-master">
+                            <option value="">Не выбран</option>
+                            <option value="1">Иванов И.И.</option>
+                            <option value="2">Петров П.П.</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md6">
+                    <div class="mui-form-control">
+                        <label for="service-act-from-client">Фото акта от клиента</label>
+                        <input type="file" id="service-act-from-client-file" class="hidden">
+                        <button onclick="document.getElementById('service-act-from-client-file').click()" class="mui-button mui-button-outlined">Выбрать файл</button>
+                        <span id="service-act-from-client-name" style="margin-left:10px;">Файл не выбран</span>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md6">
+                    <div class="mui-form-control">
+                        <label for="service-act-to-client">Фото акта к клиенту</label>
+                        <input type="file" id="service-act-to-client-file" class="hidden">
+                        <button onclick="document.getElementById('service-act-to-client-file').click()" class="mui-button mui-button-outlined">Выбрать файл</button>
+                        <span id="service-act-to-client-name" style="margin-left:10px;">Файл не выбран</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mui-typography-subtitle1">Добавленные товары/услуги</h3>
+            <div id="service-line-items-container">
+                <!-- Сюда будут добавляться строки товаров/услуг -->
+            </div>
+            <button id="btn-add-line-item" class="mui-button mui-button-outlined">Добавить товар/услугу</button>
+
+            <h3 class="mui-typography-subtitle1" style="margin-top: 20px;">Оформление и оплата</h3>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-company">Компания *</label>
+                        <select id="service-company">
+                            <option value="">Не выбрано</option>
+                            <option value="1">ООО "Рога и Копыта"</option>
+                            <option value="2">ИП "Лучший Сервис"</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-branch">Филиал *</label>
+                        <select id="service-branch">
+                            <option value="">Не выбрано</option>
+                            <option value="101">Филиал №1 (Москва)</option>
+                            <option value="102">Филиал №2 (СПб)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-cashbox">Касса *</label>
+                        <select id="service-cashbox">
+                            <option value="">Не выбрано</option>
+                            <option value="c1">Касса 1</option>
+                            <option value="c2">Касса 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md4">
+                    <div class="mui-form-control">
+                        <label for="service-total-amount">Общая сумма</label>
+                        <input type="text" id="service-total-amount" value="0.00" disabled>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12">
+                    <div class="mui-form-control">
+                        <label for="service-notes">Примечание</label>
+                        <textarea id="service-notes" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-panel" id="service-form-actions">
+                <button id="btn-service-save" class="mui-button mui-button-contained-primary">Сохранить сервис</button>
+                <button id="btn-service-edit" class="mui-button mui-button-outlined hidden">Редактировать</button>
+                <button id="btn-service-cancel" class="mui-button mui-button-text">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Список сервисов -->
+    <div id="tab-service-list" class="tab-content">
+        <div class="mui-paper">
+            <h2 class="mui-typography-h5">Список сервисов</h2>
+            <div class="mui-grid-container">
+                <div class="mui-grid-item xs12 md3">
+                    <div class="mui-form-control">
+                        <label for="filter-service-company">Компания</label>
+                        <select id="filter-service-company">
+                            <option value="">Все</option>
+                            <option value="1">ООО "Рога и Копыта"</option>
+                            <option value="2">ИП "Лучший Сервис"</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12 md3">
+                    <div class="mui-form-control">
+                        <label for="filter-service-branch">Филиал</label>
+                        <select id="filter-service-branch">
+                            <option value="">Все</option>
+                            <option value="101">Филиал №1 (Москва)</option>
+                            <option value="102">Филиал №2 (СПб)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mui-grid-item xs6 md3">
+                    <div class="mui-form-control">
+                        <label for="filter-service-period-from">Период с</label>
+                        <input type="date" id="filter-service-period-from">
+                    </div>
+                </div>
+                <div class="mui-grid-item xs6 md3">
+                    <div class="mui-form-control">
+                        <label for="filter-service-period-to">Период по</label>
+                        <input type="date" id="filter-service-period-to">
+                    </div>
+                </div>
+                <div class="mui-grid-item xs12">
+                    <button id="btn-apply-service-filter" class="mui-button mui-button-contained-primary">Применить</button>
+                </div>
+            </div>
+
+            <div id="service-list-results" style="margin-top: 20px;">
+                <h3 class="mui-typography-subtitle1">Найденные сервисы:</h3>
+                <table class="mui-table">
+                    <thead>
+                    <tr>
+                        <th>№ Сервиса</th>
+                        <th>Дата создания</th>
+                        <th>Клиент</th>
+                        <th>Товар</th>
+                        <th>СН</th>
+                        <th>Мастер</th>
+                        <th>Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody id="service-list-table-body">
+                    <!-- Пример строки, будет добавлено JS -->
+                    </tbody>
+                </table>
+                <p id="no-services-found" class="hidden">Сервисы не найдены.</p>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- /.container -->
+
+<script>
+    // --- Tab Navigation ---
+    const tabs = document.querySelectorAll('.mui-tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const targetTabContentId = tab.dataset.tab;
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetTabContentId) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // --- Mock Data and State ---
+    let currentServiceFormMode = 'create'; // 'create', 'view', 'edit'
+    let currentServiceId = null;
+    let lineItemCounter = 0;
+
+    const sampleContracts = [
+        { id: 'D001', client: 'Иванов А.А.', product: 'Ноутбук XYZ', sn: 'SN12345', saleDate: '2023-01-15' },
+        { id: 'D002', client: 'Петрова Б.Б.', product: 'Смартфон ABC', sn: 'SN67890', saleDate: '2023-03-20' },
+    ];
+
+    const sampleServices = [
+        { id: 'S001', creationDate: '2023-10-01', client: 'Иванов А.А.', product: 'Ноутбук XYZ', sn: 'SN12345', master: 'Петров П.П.', status: 'В работе', contractProduct: 'Ноутбук XYZ', contractSN: 'SN12345', contractSaleDate: '2023-01-15', acceptDate: '2023-10-01', actFromClient: 'act_ivanov.jpg', actToClient: null, items: [{type: 'Услуга', name: 'Диагностика', qty: 1, amount: 500, currency: 'RUB'}], company: '1', branch: '101', cashbox: 'c1', notes: 'Первичный осмотр' },
+        { id: 'S002', creationDate: '2023-11-05', client: 'Сидоров В.В.', product: 'Планшет QWE', sn: 'SN54321', master: 'Иванов И.И.', status: 'Завершен', contractProduct: 'Планшет QWE', contractSN: 'SN54321', contractSaleDate: '2023-02-10', acceptDate: '2023-11-05', actFromClient: 'act_sidorov.jpg', actToClient: 'act_sidorov_return.jpg', items: [{type: 'Товар', name: 'Замена экрана', qty: 1, amount: 3000, currency: 'RUB'}, {type: 'Услуга', name: 'Работа по замене', qty: 1, amount: 1500, currency: 'RUB'}], company: '2', branch: '102', cashbox: 'c2', notes: 'Заменен экран, клиент доволен.' },
+    ];
+
+    // --- Tab 1: Поиск договора ---
+    const btnApplyContractSearch = document.getElementById('btn-apply-contract-search');
+    const contractSearchResultsDiv = document.getElementById('contract-search-results');
+    const contractTableBody = contractSearchResultsDiv.querySelector('tbody');
+    const noContractsFoundP = document.getElementById('no-contracts-found');
+
+    btnApplyContractSearch.addEventListener('click', () => {
+        contractTableBody.innerHTML = ''; // Clear previous results
+        // Simulate search - for now, just show all sample contracts
+        if (sampleContracts.length > 0) {
+            sampleContracts.forEach(contract => {
+                const row = contractTableBody.insertRow();
+                row.innerHTML = `
+                        <td>${contract.id}</td>
+                        <td>${contract.client}</td>
+                        <td>${contract.product}</td>
+                        <td>${contract.sn}</td>
+                        <td>${contract.saleDate}</td>
+                        <td><button class="mui-button mui-button-outlined btn-create-service-from-contract" data-contract-id="${contract.id}">Создать сервис</button></td>
+                    `;
+            });
+            noContractsFoundP.classList.add('hidden');
+        } else {
+            noContractsFoundP.classList.remove('hidden');
+        }
+        contractSearchResultsDiv.classList.remove('hidden');
+
+        // Add event listeners to new buttons
+        document.querySelectorAll('.btn-create-service-from-contract').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const contractId = e.target.dataset.contractId;
+                const selectedContract = sampleContracts.find(c => c.id === contractId);
+                if (selectedContract) {
+                    // Switch to "Создать/Редактировать сервис" tab and prefill
+                    switchToServiceForm('create', null, selectedContract);
+                }
+            });
+        });
+    });
+
+    // --- Tab 2: Создать/Редактировать сервис ---
+    const serviceFormTitle = document.getElementById('service-form-title');
+    const contractProductInput = document.getElementById('service-contract-product');
+    const contractSNInput = document.getElementById('service-contract-sn');
+    const contractSaleDateInput = document.getElementById('service-contract-saledate');
+    const acceptDateInput = document.getElementById('service-accept-date');
+    const masterSelect = document.getElementById('service-master');
+    // File inputs
+    const actFromClientFile = document.getElementById('service-act-from-client-file');
+    const actFromClientNameSpan = document.getElementById('service-act-from-client-name');
+    actFromClientFile.addEventListener('change', () => actFromClientNameSpan.textContent = actFromClientFile.files.length > 0 ? actFromClientFile.files[0].name : 'Файл не выбран');
+    const actToClientFile = document.getElementById('service-act-to-client-file');
+    const actToClientNameSpan = document.getElementById('service-act-to-client-name');
+    actToClientFile.addEventListener('change', () => actToClientNameSpan.textContent = actToClientFile.files.length > 0 ? actToClientFile.files[0].name : 'Файл не выбран');
+
+
+    const lineItemsContainer = document.getElementById('service-line-items-container');
+    const btnAddLineItem = document.getElementById('btn-add-line-item');
+    const serviceCompanySelect = document.getElementById('service-company');
+    const serviceBranchSelect = document.getElementById('service-branch');
+    const serviceCashboxSelect = document.getElementById('service-cashbox');
+    const serviceTotalAmountInput = document.getElementById('service-total-amount');
+    const serviceNotesTextarea = document.getElementById('service-notes');
+    const btnServiceSave = document.getElementById('btn-service-save');
+    const btnServiceEdit = document.getElementById('btn-service-edit');
+    const btnServiceCancel = document.getElementById('btn-service-cancel');
+
+    function setFormEditable(isEditable) {
+        const formElements = [
+            acceptDateInput, masterSelect, actFromClientFile.nextElementSibling, actToClientFile.nextElementSibling, // buttons for file inputs
+            serviceCompanySelect, serviceBranchSelect, serviceCashboxSelect, serviceNotesTextarea, btnAddLineItem
+        ];
+        formElements.forEach(el => el.disabled = !isEditable);
+
+        lineItemsContainer.querySelectorAll('select, input, button').forEach(el => {
+            // Keep delete button always active in edit mode
+            if (el.classList.contains('btn-delete-line-item')) {
+                el.disabled = !isEditable;
+            } else {
+                el.disabled = !isEditable;
+            }
+        });
+
+        // Special handling for file input wrappers
+        actFromClientFile.disabled = !isEditable;
+        actToClientFile.disabled = !isEditable;
+        actFromClientFile.parentElement.style.opacity = isEditable ? 1 : 0.6;
+        actToClientFile.parentElement.style.opacity = isEditable ? 1 : 0.6;
+
+
+        // Show/hide buttons based on mode
+        btnServiceSave.classList.toggle('hidden', !isEditable || currentServiceFormMode === 'edit');
+        btnServiceEdit.classList.toggle('hidden', currentServiceFormMode !== 'view'); // Show only in view mode
+
+        if (currentServiceFormMode === 'edit' && isEditable) { // Special case for save button text in edit mode
+            btnServiceSave.textContent = 'Сохранить изменения';
+            btnServiceSave.classList.remove('hidden');
+        } else if (currentServiceFormMode === 'create') {
+            btnServiceSave.textContent = 'Сохранить сервис';
+        }
+    }
+
+    function resetServiceForm() {
+        serviceFormTitle.textContent = 'Создание нового сервиса';
+        [contractProductInput, contractSNInput, contractSaleDateInput, acceptDateInput,
+            serviceTotalAmountInput, serviceNotesTextarea].forEach(el => el.value = '');
+        serviceTotalAmountInput.value = '0.00';
+        [masterSelect, serviceCompanySelect, serviceBranchSelect, serviceCashboxSelect].forEach(el => el.selectedIndex = 0);
+        actFromClientNameSpan.textContent = 'Файл не выбран';
+        actFromClientFile.value = '';
+        actToClientNameSpan.textContent = 'Файл не выбран';
+        actToClientFile.value = '';
+        lineItemsContainer.innerHTML = '';
+        lineItemCounter = 0;
+        currentServiceId = null;
+        setFormEditable(true);
+    }
+
+    function calculateTotalAmount() {
+        let total = 0;
+        lineItemsContainer.querySelectorAll('.line-item-row').forEach(row => {
+            const amountInput = row.querySelector('input[name="line-item-amount"]');
+            if (amountInput && amountInput.value) {
+                total += parseFloat(amountInput.value) || 0;
+            }
+        });
+        serviceTotalAmountInput.value = total.toFixed(2);
+    }
+
+    function addLineItem(itemData = null) {
+        lineItemCounter++;
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('line-item-row');
+        itemDiv.innerHTML = `
+                <div class="mui-form-control" style="flex: 2;">
+                    <label for="item-type-${lineItemCounter}">Тип</label>
+                    <select id="item-type-${lineItemCounter}" name="line-item-type">
+                        <option value="Товар">Товар</option>
+                        <option value="Услуга">Услуга</option>
+                    </select>
+                </div>
+                <div class="mui-form-control" style="flex: 4;">
+                    <label for="item-name-${lineItemCounter}">Наименование</label>
+                    <select id="item-name-${lineItemCounter}" name="line-item-name">
+                        <option value="">Выберите...</option>
+                        <!-- Options will be dynamically populated based on type -->
+                        <option value="Диагностика">Диагностика (Услуга)</option>
+                        <option value="Замена экрана">Замена экрана (Товар)</option>
+                        <option value="Ремонт платы">Ремонт платы (Услуга)</option>
+                         <option value="Аккумулятор XP200">Аккумулятор XP200 (Товар)</option>
+                    </select>
+                </div>
+                <div class="mui-form-control" style="flex: 1;">
+                    <label for="item-qty-${lineItemCounter}">Кол-во</label>
+                    <input type="number" id="item-qty-${lineItemCounter}" name="line-item-qty" value="1" min="1">
+                </div>
+                <div class="mui-form-control" style="flex: 2;">
+                    <label for="item-amount-${lineItemCounter}">Сумма</label>
+                    <input type="number" id="item-amount-${lineItemCounter}" name="line-item-amount" value="0.00" step="0.01" min="0">
+                </div>
+                 <div class="mui-form-control" style="flex: 1;">
+                    <label for="item-currency-${lineItemCounter}">Валюта</label>
+                    <select id="item-currency-${lineItemCounter}" name="line-item-currency">
+                        <option value="RUB">RUB</option>
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+                <button class="mui-icon-button btn-delete-line-item" title="Удалить позицию" style="align-self: center; margin-top: 15px;">🗑️</button>
+            `;
+
+        const typeSelect = itemDiv.querySelector('select[name="line-item-type"]');
+        const qtyInput = itemDiv.querySelector('input[name="line-item-qty"]');
+        const nameSelect = itemDiv.querySelector('select[name="line-item-name"]');
+        const amountInput = itemDiv.querySelector('input[name="line-item-amount"]');
+        const currencySelect = itemDiv.querySelector('select[name="line-item-currency"]');
+
+
+        typeSelect.addEventListener('change', () => {
+            qtyInput.style.display = typeSelect.value === 'Товар' ? 'block' : 'none';
+            qtyInput.previousElementSibling.style.display = typeSelect.value === 'Товар' ? 'block' : 'none';
+            // Here you would typically filter 'nameSelect' options
+        });
+        // Trigger change for initial state
+        qtyInput.style.display = typeSelect.value === 'Товар' ? 'block' : 'none';
+        qtyInput.previousElementSibling.style.display = typeSelect.value === 'Товар' ? 'block' : 'none';
+
+
+        if (itemData) {
+            typeSelect.value = itemData.type;
+            nameSelect.value = itemData.name; // This assumes name is unique enough for demo
+            qtyInput.value = itemData.qty || 1;
+            amountInput.value = itemData.amount || '0.00';
+            currencySelect.value = itemData.currency || 'RUB';
+            qtyInput.style.display = itemData.type === 'Товар' ? 'block' : 'none';
+            qtyInput.previousElementSibling.style.display = itemData.type === 'Товар' ? 'block' : 'none';
+        }
+
+        amountInput.addEventListener('input', calculateTotalAmount);
+
+
+        itemDiv.querySelector('.btn-delete-line-item').addEventListener('click', (e) => {
+            e.target.closest('.line-item-row').remove();
+            calculateTotalAmount();
+        });
+
+        lineItemsContainer.appendChild(itemDiv);
+        setFormEditable(currentServiceFormMode !== 'view'); // Re-apply disabled state if in view mode
+        calculateTotalAmount();
+    }
+
+    btnAddLineItem.addEventListener('click', () => addLineItem());
+
+    btnServiceSave.addEventListener('click', () => {
+        // Simulate save
+        if (currentServiceFormMode === 'create') {
+            alert('Сервис создан (симуляция)!');
+            const newServiceId = 'S' + String(Date.now()).slice(-3); // Generate a mock ID
+            // Add to sampleServices array (not fully implemented here for brevity)
+            console.log('Creating new service:', {
+                id: newServiceId,
+                // collect all form data here
+            });
+            resetServiceForm();
+        } else if (currentServiceFormMode === 'edit') {
+            alert(`Изменения для сервиса ${currentServiceId} сохранены (симуляция)!`);
+            console.log('Saving changes for service:', currentServiceId, {
+                // collect all form data here
+            });
+            switchToServiceForm('view', currentServiceId); // Revert to view mode
+        }
+    });
+
+    btnServiceEdit.addEventListener('click', () => {
+        switchToServiceForm('edit', currentServiceId);
+    });
+
+    btnServiceCancel.addEventListener('click', () => {
+        if (currentServiceFormMode === 'edit') {
+            switchToServiceForm('view', currentServiceId); // Revert to view mode with original data
+        } else { // create mode
+            resetServiceForm();
+            // Optionally switch to a default tab
+            document.querySelector('.mui-tab[data-tab="tab-search-contract"]').click();
+        }
+    });
+
+    function switchToServiceForm(mode, serviceId = null, contractData = null) {
+        currentServiceFormMode = mode;
+        currentServiceId = serviceId;
+        resetServiceForm(); // Clear form first
+
+        let serviceData = null;
+        if (serviceId) {
+            serviceData = sampleServices.find(s => s.id === serviceId);
+        }
+
+        if (mode === 'create') {
+            serviceFormTitle.textContent = 'Создание нового сервиса';
+            if (contractData) {
+                contractProductInput.value = contractData.product;
+                contractSNInput.value = contractData.sn;
+                contractSaleDateInput.value = contractData.saleDate;
+            }
+            setFormEditable(true);
+        } else if (mode === 'view' && serviceData) {
+            serviceFormTitle.textContent = `Просмотр сервиса № ${serviceData.id}`;
+            // Populate form with serviceData
+            contractProductInput.value = serviceData.contractProduct || '';
+            contractSNInput.value = serviceData.contractSN || '';
+            contractSaleDateInput.value = serviceData.contractSaleDate || '';
+            acceptDateInput.value = serviceData.acceptDate;
+            masterSelect.value = serviceData.master;
+            actFromClientNameSpan.textContent = serviceData.actFromClient || 'Файл не выбран';
+            actToClientNameSpan.textContent = serviceData.actToClient || 'Файл не выбран';
+            serviceData.items.forEach(item => addLineItem(item));
+            serviceCompanySelect.value = serviceData.company;
+            serviceBranchSelect.value = serviceData.branch;
+            serviceCashboxSelect.value = serviceData.cashbox;
+            serviceNotesTextarea.value = serviceData.notes;
+            calculateTotalAmount(); // Recalculate after adding items
+            setFormEditable(false);
+        } else if (mode === 'edit' && serviceData) {
+            serviceFormTitle.textContent = `Редактирование сервиса № ${serviceData.id}`;
+            // Populate form with serviceData (same as view, but then make editable)
+            contractProductInput.value = serviceData.contractProduct || '';
+            contractSNInput.value = serviceData.contractSN || '';
+            contractSaleDateInput.value = serviceData.contractSaleDate || '';
+            acceptDateInput.value = serviceData.acceptDate;
+            masterSelect.value = serviceData.master;
+            actFromClientNameSpan.textContent = serviceData.actFromClient || 'Файл не выбран';
+            actToClientNameSpan.textContent = serviceData.actToClient || 'Файл не выбран';
+            serviceData.items.forEach(item => addLineItem(item));
+            serviceCompanySelect.value = serviceData.company;
+            serviceBranchSelect.value = serviceData.branch;
+            serviceCashboxSelect.value = serviceData.cashbox;
+            serviceNotesTextarea.value = serviceData.notes;
+            calculateTotalAmount();
+            setFormEditable(true); // Make editable
+        }
+
+        // Switch to the tab
+        document.querySelector('.mui-tab[data-tab="tab-service-form"]').click();
+    }
+
+
+    // --- Tab 3: Список сервисов ---
+    const btnApplyServiceFilter = document.getElementById('btn-apply-service-filter');
+    const serviceListTableBody = document.getElementById('service-list-table-body');
+    const noServicesFoundP = document.getElementById('no-services-found');
+
+    function populateServiceList() {
+        serviceListTableBody.innerHTML = ''; // Clear previous results
+        // Simulate filter - for now, just show all sample services
+        if (sampleServices.length > 0) {
+            sampleServices.forEach(service => {
+                const row = serviceListTableBody.insertRow();
+                row.innerHTML = `
+                        <td>${service.id}</td>
+                        <td>${service.creationDate}</td>
+                        <td>${service.client}</td>
+                        <td>${service.product}</td>
+                        <td>${service.sn}</td>
+                        <td>${sampleMasters.find(m => m.id === service.master)?.name || service.master}</td>
+                        <td>${service.status}</td>
+                    `;
+                row.style.cursor = 'pointer';
+                row.addEventListener('click', () => {
+                    switchToServiceForm('view', service.id);
+                });
+            });
+            noServicesFoundP.classList.add('hidden');
+        } else {
+            noServicesFoundP.classList.remove('hidden');
+        }
+    }
+
+    btnApplyServiceFilter.addEventListener('click', populateServiceList);
+
+    // Initial population of master dropdowns and service list (if any)
+    const sampleMasters = [ {id: '1', name: 'Иванов И.И.'}, {id: '2', name: 'Петров П.П.'}, {id: '3', name: 'Сидорова С.С.'} ];
+    masterSelect.innerHTML = '<option value="">Не выбран</option>'; // Clear existing
+    sampleMasters.forEach(m => masterSelect.add(new Option(m.name, m.id)));
+
+    // Populate service list on load for demo
+    populateServiceList();
+    // Add a default line item when creating new service from scratch
+    // addLineItem(); // Call this if you want a blank item on fresh form load without contract
+
+</script>
+</body>
+</html>

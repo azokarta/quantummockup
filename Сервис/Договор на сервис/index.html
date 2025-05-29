@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Договор на оказание сервиса - Макет</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1976d2; /* MUI primary color approximation */
+            margin-bottom: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            color: #555;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px; /* Overlap with container border */
+        }
+        .tab-button.active {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+        }
+        .tab-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form elements (MUI-like approximation) */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #666;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%; /* Full width for select as well */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #fff; /* Ensure select background is white */
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #1976d2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .form-group input[readonly],
+        .form-group select[disabled] { /* Style for disabled select */
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+            color: #777;
+        }
+        .form-group select[disabled] {
+            -webkit-appearance: none; /* For Safari/Chrome to hide arrow when disabled if needed */
+            -moz-appearance: none;    /* For Firefox */
+            appearance: none;
+        }
+        .form-group select:not([disabled]) { /* Restore appearance for enabled selects */
+            -webkit-appearance: menulist-button;
+            -moz-appearance: menulist-button;
+            appearance: menulist-button;
+        }
+
+
+        .button {
+            padding: 10px 18px;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .button-primary {
+            background-color: #1976d2;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #1565c0;
+        }
+        .button-outlined {
+            background-color: transparent;
+            color: #1976d2;
+            border: 1px solid #1976d2;
+        }
+        .button-outlined:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+        .button-text {
+            background-color: transparent;
+            color: #1976d2;
+            border: none;
+        }
+        .button-text:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+
+        .actions {
+            margin-top: 25px;
+            text-align: right;
+        }
+        .actions .button + .button {
+            margin-left: 10px;
+        }
+
+        .employee-photo-container {
+            margin-top: 10px;
+        }
+        .employee-photo-container img, .employee-photo-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; /* MUI Avatar style */
+            object-fit: cover;
+            border: 2px solid #e0e0e0;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #777;
+        }
+        .sn-group {
+            display: flex;
+            align-items: flex-end; /* Align button with bottom of input */
+        }
+        .sn-group input[type="text"] { /* SN input still text */
+            flex-grow: 1;
+            margin-right: 10px;
+            width: calc(100% - 120px); /* Adjust width to accommodate button */
+        }
+
+        /* Simple Alert Simulation */
+        .alert {
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+            display: none; /* Hidden by default */
+        }
+        .alert-success {
+            background-color: #e8f5e9; /* light green */
+            color: #2e7d32; /* dark green */
+            border: 1px solid #a5d6a7;
+        }
+        .alert-info {
+            background-color: #e3f2fd; /* light blue */
+            color: #1565c0; /* dark blue */
+            border: 1px solid #90caf9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Договор на оказание сервиса</h1>
+
+    <div class="tabs">
+        <button class="tab-button active" onclick="showTab('createAgreementTab', this)">Создать договор</button>
+        <button class="tab-button" onclick="showTab('viewAgreementTab', this)">Просмотр договора</button>
+    </div>
+
+    <!-- Alert placeholder -->
+    <div id="globalAlert" class="alert"></div>
+
+    <!-- Create Agreement Tab -->
+    <div id="createAgreementTab" class="tab-content active">
+        <form id="createAgreementForm">
+            <div class="form-group">
+                <label for="createCompany">Компания</label>
+                <select id="createCompany" name="company">
+                    <option value="">-- Выберите компанию --</option>
+                    <option value="company1">ООО "Ромашка"</option>
+                    <option value="company2">АО "Вектор"</option>
+                    <option value="company3">ИП "Сидоров"</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="createBranch">Филиал</label>
+                <select id="createBranch" name="branch">
+                    <option value="">-- Выберите филиал --</option>
+                    <option value="branch1">Центральный</option>
+                    <option value="branch2">Северный</option>
+                    <option value="branch3">Южный (демо)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="createAgreementDate">Дата договора</label>
+                <input type="date" id="createAgreementDate" name="agreementDate">
+            </div>
+            <div class="form-group">
+                <label for="createEmployee">Сотрудник</label>
+                <select id="createEmployee" name="employee" onchange="updateEmployeePhoto('create')">
+                    <option value="">-- Выберите сотрудника --</option>
+                    <option value="emp1">Иванов Иван Иванович</option>
+                    <option value="emp2">Петров Петр Петрович</option>
+                    <option value="emp3">Сидорова Анна Алексеевна</option>
+                </select>
+            </div>
+            <div class="employee-photo-container">
+                <label>Фото сотрудника:</label>
+                <div id="createEmployeePhoto" class="employee-photo-placeholder">Фото</div>
+            </div>
+            <div class="form-group">
+                <label for="createProduct">Товар/Услуга</label>
+                <select id="createProduct" name="product">
+                    <option value="">-- Выберите товар/услугу --</option>
+                    <option value="prod1">Ремонт ноутбука</option>
+                    <option value="prod2">Замена экрана смартфона</option>
+                    <option value="prod3">Установка ПО</option>
+                </select>
+            </div>
+            <div class="form-group sn-group">
+                <div>
+                    <label for="createSN">Серийный номер (СН)</label>
+                    <input type="text" id="createSN" name="sn" placeholder="S/N: XXXXXXXX">
+                </div>
+                <button type="button" class="button button-outlined" onclick="checkSN('createSN')" style="margin-left:10px; padding: 9px 15px;">Проверить</button>
+            </div>
+            <div class="form-group">
+                <label for="createClientName">ФИО клиента</label>
+                <input type="text" id="createClientName" name="clientName" placeholder="Петров Петр Петрович">
+            </div>
+            <div class="form-group">
+                <label for="createClientAddress">Адрес клиента</label>
+                <textarea id="createClientAddress" name="clientAddress" placeholder="г. Город, ул. Уличная, д. 1, кв. 2"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="createClientPhone">Телефон клиента</label>
+                <input type="text" id="createClientPhone" name="clientPhone" placeholder="+7 (XXX) XXX-XX-XX">
+            </div>
+            <div class="actions">
+                <button type="button" class="button button-primary" onclick="saveAgreement()">Сохранить договор</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- View/Edit Agreement Tab -->
+    <div id="viewAgreementTab" class="tab-content">
+        <form id="viewAgreementForm">
+            <div class="form-group">
+                <label for="viewCompany">Компания</label>
+                <select id="viewCompany" name="company" disabled>
+                    <option value="company1">ООО "Ромашка"</option>
+                    <option value="company2" selected>АО "Вектор"</option>
+                    <option value="company3">ИП "Сидоров"</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="viewBranch">Филиал</label>
+                <select id="viewBranch" name="branch" disabled>
+                    <option value="branch1">Центральный</option>
+                    <option value="branch2">Северный</option>
+                    <option value="branch3" selected>Южный (демо)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="viewAgreementDate">Дата договора</label>
+                <input type="date" id="viewAgreementDate" name="agreementDate" value="2023-10-26" readonly>
+            </div>
+            <div class="form-group">
+                <label for="viewEmployee">Сотрудник</label>
+                <select id="viewEmployee" name="employee" onchange="updateEmployeePhoto('view')" disabled>
+                    <option value="emp1">Иванов Иван Иванович</option>
+                    <option value="emp2" selected>Петров Петр Петрович</option>
+                    <option value="emp3">Сидорова Анна Алексеевна</option>
+                </select>
+            </div>
+            <div class="employee-photo-container">
+                <label>Фото сотрудника:</label>
+                <img id="viewEmployeePhoto" src="https://via.placeholder.com/80/007bff/ffffff?text=Фото" alt="Фото сотрудника">
+            </div>
+            <div class="form-group">
+                <label for="viewProduct">Товар/Услуга</label>
+                <select id="viewProduct" name="product" disabled>
+                    <option value="prod1">Ремонт ноутбука</option>
+                    <option value="prod2" selected>Замена экрана смартфона</option>
+                    <option value="prod3">Установка ПО</option>
+                </select>
+            </div>
+            <div class="form-group sn-group">
+                <div>
+                    <label for="viewSN">Серийный номер (СН)</label>
+                    <input type="text" id="viewSN" name="sn" value="SN12345678" readonly>
+                </div>
+                <button type="button" id="viewCheckSNButton" class="button button-outlined" onclick="checkSN('viewSN')" style="margin-left:10px; padding: 9px 15px;">Проверить</button>
+            </div>
+            <div class="form-group">
+                <label for="viewClientName">ФИО клиента</label>
+                <input type="text" id="viewClientName" name="clientName" value="Кузнецова Мария Игоревна" readonly>
+            </div>
+            <div class="form-group">
+                <label for="viewClientAddress">Адрес клиента</label>
+                <textarea id="viewClientAddress" name="clientAddress" readonly>г. Столица, пр. Мира, д. 100, оф. 5</textarea>
+            </div>
+            <div class="form-group">
+                <label for="viewClientPhone">Телефон клиента</label>
+                <input type="text" id="viewClientPhone" name="clientPhone" value="+7 (900) 123-45-67" readonly>
+            </div>
+            <div class="actions">
+                <button type="button" id="editButton" class="button button-outlined" onclick="enableEditMode()">Изменить договор</button>
+                <button type="button" id="saveChangesButton" class="button button-primary" style="display:none;" onclick="saveEditedAgreement()">Сохранить изменения</button>
+                <button type="button" id="cancelButton" class="button button-text" style="display:none;" onclick="cancelEditMode()">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('createAgreementDate').value = today;
+        updateEmployeePhoto('view'); // Initialize photo for view tab based on selected employee
+        document.getElementById('viewCheckSNButton').disabled = true; // Initially disable SN check in view mode
+    });
+
+    function showTab(tabId, RtabButton) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(button => button.classList.remove('active'));
+        RtabButton.classList.add('active');
+    }
+
+    function updateEmployeePhoto(formPrefix) {
+        const employeeSelect = document.getElementById(formPrefix + 'Employee');
+        const photoContainer = document.getElementById(formPrefix + 'EmployeePhoto');
+        let employeeName = "";
+        if (employeeSelect.selectedIndex > 0) { // Check if a real employee is selected (not the placeholder "-- Выберите...")
+            employeeName = employeeSelect.options[employeeSelect.selectedIndex].text;
+        }
+
+        if (employeeName) {
+            if (photoContainer.tagName === 'IMG') {
+                photoContainer.src = `https://via.placeholder.com/80/007bff/ffffff&text=${employeeName.substring(0,1).toUpperCase()}`;
+            } else { // DIV placeholder
+                photoContainer.textContent = employeeName.substring(0, 2).toUpperCase();
+                photoContainer.style.backgroundImage = "none";
+            }
+        } else {
+            if (photoContainer.tagName === 'IMG') {
+                photoContainer.src = "https://via.placeholder.com/80/cccccc/ffffff?text=Фото";
+            } else {
+                photoContainer.textContent = "Фото";
+            }
+        }
+    }
+
+    function checkSN(inputId) {
+        const snValue = document.getElementById(inputId).value;
+        const alertBox = document.getElementById('globalAlert');
+        if (snValue) {
+            alertBox.textContent = `Проверка СН "${snValue}": Найден на складе. (симуляция)`;
+            alertBox.className = 'alert alert-info';
+        } else {
+            alertBox.textContent = 'Пожалуйста, введите серийный номер для проверки.';
+            alertBox.className = 'alert alert-info';
+        }
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+    }
+
+    function saveAgreement() {
+        const company = document.getElementById('createCompany').value;
+        const clientName = document.getElementById('createClientName').value; // Example of another required field
+        const alertBox = document.getElementById('globalAlert');
+
+        if (company && clientName) { // Simple validation: company and clientName must be filled
+            alertBox.textContent = 'Договор успешно сохранен! (симуляция)';
+            alertBox.className = 'alert alert-success';
+            document.getElementById('createAgreementForm').reset();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('createAgreementDate').value = today;
+            updateEmployeePhoto('create');
+        } else {
+            let errorMsg = 'Ошибка: Пожалуйста, заполните обязательные поля.';
+            if (!company) errorMsg += " (Компания)";
+            if (!clientName) errorMsg += " (ФИО клиента)";
+            alertBox.textContent = errorMsg + " (симуляция).";
+            alertBox.className = 'alert alert-info';
+        }
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+    }
+
+    let originalViewFormData = {};
+
+    function enableEditMode() {
+        const form = document.getElementById('viewAgreementForm');
+        // For inputs and textareas that use 'readonly'
+        form.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => {
+            originalViewFormData[el.name] = el.value;
+            el.readOnly = false;
+            el.style.backgroundColor = "";
+        });
+        // For select elements that use 'disabled'
+        form.querySelectorAll('select').forEach(el => {
+            originalViewFormData[el.name] = el.value; // Store current selected value
+            el.disabled = false;
+            el.style.backgroundColor = ""; // Reset background if needed
+            el.style.webkitAppearance = "menulist-button"; // Restore arrow
+            el.style.mozAppearance = "menulist-button";
+            el.style.appearance = "menulist-button";
+        });
+
+
+        document.getElementById('viewCheckSNButton').disabled = false;
+        document.getElementById('editButton').style.display = 'none';
+        document.getElementById('saveChangesButton').style.display = 'inline-block';
+        document.getElementById('cancelButton').style.display = 'inline-block';
+
+        const alertBox = document.getElementById('globalAlert');
+        alertBox.textContent = 'Режим редактирования активирован.';
+        alertBox.className = 'alert alert-info';
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 2000);
+    }
+
+    function disableEditMode(restoreValues = true) {
+        const form = document.getElementById('viewAgreementForm');
+        // For inputs and textareas
+        form.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => {
+            if (restoreValues && originalViewFormData[el.name] !== undefined) {
+                el.value = originalViewFormData[el.name];
+            }
+            el.readOnly = true;
+            el.style.backgroundColor = "#f0f0f0";
+        });
+        // For select elements
+        form.querySelectorAll('select').forEach(el => {
+            if (restoreValues && originalViewFormData[el.name] !== undefined) {
+                el.value = originalViewFormData[el.name]; // Restore selected value
+            }
+            el.disabled = true;
+            el.style.backgroundColor = "#f0f0f0";
+            el.style.webkitAppearance = "none";
+            el.style.mozAppearance = "none";
+            el.style.appearance = "none";
+        });
+
+        updateEmployeePhoto('view'); // Refresh photo based on (possibly restored) employee name
+
+        document.getElementById('viewCheckSNButton').disabled = true;
+        document.getElementById('editButton').style.display = 'inline-block';
+        document.getElementById('saveChangesButton').style.display = 'none';
+        document.getElementById('cancelButton').style.display = 'none';
+    }
+
+    function saveEditedAgreement() {
+        const alertBox = document.getElementById('globalAlert');
+        alertBox.textContent = 'Изменения успешно сохранены! (симуляция)';
+        alertBox.className = 'alert alert-success';
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+
+        const form = document.getElementById('viewAgreementForm');
+        form.querySelectorAll('input, textarea, select').forEach(el => { // Include selects
+            originalViewFormData[el.name] = el.value; // Update stored data with new values
+        });
+
+        disableEditMode(false); // Keep new values, just make read-only/disabled
+    }
+
+    function cancelEditMode() {
+        disableEditMode(true); // Restore original values
+        const alertBox = document.getElementById('globalAlert');
+        alertBox.textContent = 'Редактирование отменено.';
+        alertBox.className = 'alert alert-info';
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 2000);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары на складе - Макет</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: #1976d2; /* MUI Primary Color */
+            margin-top: 0;
+        }
+        h1 { font-size: 2em; margin-bottom: 20px; }
+        h2 { font-size: 1.5em; margin-bottom: 15px; }
+        h3 { font-size: 1.2em; margin-bottom: 10px; }
+
+
+        .filters-panel {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-item label {
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            color: #555;
+        }
+
+        .filter-item select,
+        .filter-item input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .filter-item.checkbox-item {
+            flex-direction: row;
+            align-items: center;
+            padding-top: 20px; /* Align with labels of other inputs */
+        }
+        .filter-item.checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+            height: 18px;
+            width: 18px;
+        }
+        .filter-item.checkbox-item label {
+            margin-bottom: 0;
+        }
+
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button.primary {
+            background-color: #1976d2; /* MUI Primary */
+            color: white;
+        }
+        button.primary:hover {
+            background-color: #1565c0;
+        }
+        button.secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        button.secondary:hover {
+            background-color: #d5d5d5;
+        }
+        .apply-button-container {
+            grid-column: 1 / -1;
+            text-align: right;
+            padding-top: 10px;
+        }
+        @media (min-width: 880px) {
+            .filter-grid {
+                grid-template-columns: 1fr 1fr 1fr auto;
+            }
+            .apply-button-container {
+                grid-column: auto;
+                text-align: left;
+                padding-top: 0;
+            }
+            .filter-item.checkbox-item {
+                padding-top: 24px; /* More precise alignment for desktop */
+            }
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f8ff; /* Light blue hover */
+            cursor: pointer;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .summary-section {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        .summary-section h3 {
+            margin-top:0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .summary-item {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+        .total-overall-summary {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .detail-section {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Товары на складе</h1>
+
+    <!-- Основной контент: Фильтры и таблица -->
+    <div id="mainContent">
+        <div class="filters-panel">
+            <h2>Параметры поиска</h2>
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <label for="company">Компания</label>
+                    <select id="company">
+                        <option value="">-- Выберите компанию --</option>
+                        <option value="1">ООО "Ромашка"</option>
+                        <option value="2">АО "Василек"</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="warehouse">Склад</label>
+                    <select id="warehouse">
+                        <option value="all">Все склады</option>
+                        <option value="101">Основной склад (Москва)</option>
+                        <option value="102">Склад готовой продукции (СПб)</option>
+                        <option value="103">Резервный склад</option>
+                    </select>
+                </div>
+                <div class="filter-item checkbox-item">
+                    <input type="checkbox" id="includeAccountable" checked> <!-- Изменено: checked по умолчанию -->
+                    <label for="includeAccountable">Подотчетные товары</label> <!-- Изменено: лейбл -->
+                </div>
+                <div class="filter-item apply-button-container">
+                    <button id="applyFilters" class="primary">Применить</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainTableContainer">
+            <h3>Результаты поиска</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Склад</th>
+                    <th>Товар</th>
+                    <th class="text-right">Количество</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody id="mainTableBody">
+                <!-- Rows will be added by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="summarySection" class="summary-section">
+            <h3>Итоги по товарам</h3>
+            <div id="itemizedSummary">
+                <!-- Itemized summary will be populated by JS -->
+            </div>
+            <div class="total-overall-summary">
+                Общее суммарное количество: <span id="totalOverallQuantity">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция детализации (изначально скрыта) -->
+    <div id="detailSection" class="detail-section hidden">
+        <div class="detail-header">
+            <h2 id="detailTitle">Детализация товара</h2>
+            <button id="closeDetailButton" class="secondary">Назад к списку</button>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Склад</th>
+                <th>Товар</th>
+                <th class="text-right">Количество</th>
+                <th>СН</th>
+                <th>Статус</th>
+                <th>Сотрудник</th>
+            </tr>
+            </thead>
+            <tbody id="detailTableBody">
+            <!-- Rows will be added by JS -->
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    const mainContent = document.getElementById('mainContent');
+    const detailSection = document.getElementById('detailSection');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailTableBody = document.getElementById('detailTableBody');
+    const closeDetailButton = document.getElementById('closeDetailButton');
+    const applyFiltersButton = document.getElementById('applyFilters');
+    const mainTableBody = document.getElementById('mainTableBody');
+    const itemizedSummaryContainer = document.getElementById('itemizedSummary');
+    const totalOverallQuantityEl = document.getElementById('totalOverallQuantity');
+    const includeAccountableCheckbox = document.getElementById('includeAccountable');
+
+    // Mock data for main table (simulating backend data)
+    const allItemsData = [
+        { id: 1, склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 3, статус: "На складе" },
+        { id: 2, склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 2, статус: "В подотчете" },
+        { id: 3, склад: "Склад готовой продукции (СПб)", товар: "Монитор Delta_24", количество: 12, статус: "На складе" },
+        { id: 4, склад: "Основной склад (Москва)", товар: "Клавиатура Gamma_Pro", количество: 30, статус: "На складе" },
+        { id: 5, склад: "Резервный склад", товар: "Мышь Omega_X", количество: 1, статус: "В подотчете" },
+        { id: 6, склад: "Резервный склад", товар: "Мышь Omega_X", количество: 7, статус: "На складе" },
+        { id: 7, склад: "Склад готовой продукции (СПб)", товар: "Ноутбук Alpha_15", количество: 4, статус: "На складе" },
+    ];
+
+    // Mock data for detail view
+    const mockDetailData = {
+        "Ноутбук Alpha_15": [ // Assuming this key is itemName + склад (or just itemName if unique enough for mock)
+            // Детализация для "Основной склад (Москва)" + "Ноутбук Alpha_15"
+            { склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SN12345A", статус: "В подотчете", сотрудник: "Иванов И.И." },
+            { склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SN12345B", статус: "На складе", сотрудник: "-" },
+            { склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SN12345C", статус: "На складе", сотрудник: "-" },
+            { склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SN12345D", статус: "В подотчете", сотрудник: "Петров П.П." },
+            { склад: "Основной склад (Москва)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SN12345E", статус: "На складе", сотрудник: "-" },
+            // Детализация для "Склад готовой продукции (СПб)" + "Ноутбук Alpha_15"
+            { склад: "Склад готовой продукции (СПб)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SNSPB001", статус: "На складе", сотрудник: "-" },
+            { склад: "Склад готовой продукции (СПб)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SNSPB002", статус: "На складе", сотрудник: "-" },
+            { склад: "Склад готовой продукции (СПб)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SNSPB003", статус: "На складе", сотрудник: "-" },
+            { склад: "Склад готовой продукции (СПб)", товар: "Ноутбук Alpha_15", количество: 1, сн: "SNSPB004", статус: "На складе", сотрудник: "-" },
+        ],
+        "Монитор Delta_24": [
+            { склад: "Склад готовой продукции (СПб)", товар: "Монитор Delta_24", количество: 12, сн: "-", статус: "На складе", сотрудник: "-" },
+        ],
+        "Клавиатура Gamma_Pro": [
+            { склад: "Основной склад (Москва)", товар: "Клавиатура Gamma_Pro", количество: 30, сн: "-", статус: "На складе", сотрудник: "-" }
+        ],
+        "Мышь Omega_X": [
+            { склад: "Резервный склад", товар: "Мышь Omega_X", количество: 1, сн: "SNMOUSE001", статус: "В подотчете", сотрудник: "Сидорова А.А." },
+            // Для строк без СН, но с количеством > 1, детализация может быть агрегированной
+            { склад: "Резервный склад", товар: "Мышь Omega_X", количество: 7, сн: "-", статус: "На складе", сотрудник: "-" }
+        ]
+    };
+
+    function showDetails(skladName, itemName) {
+        mainContent.classList.add('hidden');
+        detailSection.classList.remove('hidden');
+
+        detailTitle.textContent = `Детализация: ${itemName} на складе ${skladName}`;
+
+        detailTableBody.innerHTML = '';
+
+        // Для макета мы ищем по имени товара, но в реальной системе ключ может быть сложнее
+        const items = mockDetailData[itemName]?.filter(item => item.склад === skladName) || [];
+
+        if (items.length === 0) {
+            // Fallback if specific склад-item combo not found, show generic for item
+            const genericItems = mockDetailData[itemName] || [];
+            if(genericItems.length === 0){
+                detailTableBody.innerHTML = `<tr><td colspan="6">Нет детальной информации для ${itemName} на складе ${skladName}.</td></tr>`;
+                return;
+            }
+            genericItems.forEach(populateDetailRow);
+
+        } else {
+            items.forEach(populateDetailRow);
+        }
+
+        function populateDetailRow(item) {
+            const row = detailTableBody.insertRow();
+            row.insertCell().textContent = item.склад;
+            row.insertCell().textContent = item.товар;
+            const qtyCell = row.insertCell();
+            qtyCell.textContent = item.количество; // В детализации кол-во = 1 если есть СН
+            qtyCell.classList.add('text-right');
+            row.insertCell().textContent = item.сн || "-";
+            row.insertCell().textContent = item.статус;
+            row.insertCell().textContent = item.сотрудник || "-";
+        }
+    }
+
+    function hideDetails() {
+        detailSection.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+    }
+
+    function applyAndRenderFilters() {
+        console.log("Применение фильтров:");
+        const selectedCompany = document.getElementById('company').value;
+        const selectedWarehouse = document.getElementById('warehouse').value;
+        const showAccountable = includeAccountableCheckbox.checked;
+
+        console.log("Компания:", selectedCompany);
+        console.log("Склад:", selectedWarehouse);
+        console.log("Подотчетные товары:", showAccountable);
+
+        let filteredData = allItemsData;
+
+        // Фильтр по статусу (подотчетные)
+        if (!showAccountable) {
+            filteredData = filteredData.filter(item => item.статус === "На складе");
+        }
+
+        // Тут должны быть фильтры по компании и складу (для макета опускаем, т.к. нет данных по компаниям)
+        // if (selectedCompany) { ... }
+        // if (selectedWarehouse !== 'all') { ... }
+
+        mainTableBody.innerHTML = ''; // Clear previous table data
+        let totalOverallQuantity = 0;
+        const itemTotals = {};
+
+        if (filteredData.length === 0) {
+            const row = mainTableBody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 4;
+            cell.textContent = "Нет данных для отображения по выбранным фильтрам.";
+            cell.style.textAlign = "center";
+        } else {
+            filteredData.forEach(item => {
+                const row = mainTableBody.insertRow();
+                row.onclick = () => showDetails(item.склад, item.товар); // Передаем склад и товар
+
+                row.insertCell().textContent = item.склад;
+                row.insertCell().textContent = item.товар;
+                const qtyCell = row.insertCell();
+                qtyCell.textContent = item.количество;
+                qtyCell.classList.add('text-right');
+                row.insertCell().textContent = item.статус;
+
+                totalOverallQuantity += item.количество;
+                itemTotals[item.товар] = (itemTotals[item.товар] || 0) + item.количество;
+            });
+        }
+
+        // Обновление итогов
+        itemizedSummaryContainer.innerHTML = '';
+        if (Object.keys(itemTotals).length > 0) {
+            for (const товар in itemTotals) {
+                const summaryDiv = document.createElement('div');
+                summaryDiv.classList.add('summary-item');
+                summaryDiv.textContent = `${товар}: ${itemTotals[товар]} шт.`;
+                itemizedSummaryContainer.appendChild(summaryDiv);
+            }
+        } else if (filteredData.length > 0) { // Если данные есть, но itemTotals пуст (не должно быть)
+            itemizedSummaryContainer.innerHTML = '<div class="summary-item">Не удалось рассчитать итоги по товарам.</div>';
+        } else {
+            itemizedSummaryContainer.innerHTML = '<div class="summary-item">Нет товаров для отображения итогов.</div>';
+        }
+
+
+        totalOverallQuantityEl.textContent = totalOverallQuantity;
+
+        // Для макета, сообщение об "успехе"
+        // alert('Фильтры "применены" (симуляция). Данные в таблице и итогах обновлены.');
+    }
+
+
+    closeDetailButton.addEventListener('click', hideDetails);
+    applyFiltersButton.addEventListener('click', applyAndRenderFilters);
+
+    // Первоначальная загрузка данных с учетом фильтров по умолчанию
+    document.addEventListener('DOMContentLoaded', () => {
+        applyAndRenderFilters();
+    });
+
+</script>
+
+</body>
+</html>

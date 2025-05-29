@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подотчет - Макет</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 { /* Typography variant="h4" */
+            font-size: 2.125rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #1976d2; /* MUI primary color */
+        }
+        h2 { /* Typography variant="h6" */
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1rem;
+            margin-right: 5px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            background-color: #f0f0f0;
+        }
+        .tab-button.active {
+            color: #1976d2;
+            border-bottom: 3px solid #1976d2;
+            font-weight: 500;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Grid system (simplified) */
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -8px; /* spacing */
+        }
+        .grid-item {
+            padding: 8px; /* spacing */
+            box-sizing: border-box;
+        }
+        .xs-12 { width: 100%; }
+        .sm-1 { width: calc(100% / 12 * 1); }
+        .sm-2 { width: calc(100% / 12 * 2); }
+        .sm-3 { width: calc(100% / 12 * 3); }
+        .sm-4 { width: calc(100% / 12 * 4); }
+        .sm-5 { width: calc(100% / 12 * 5); }
+        .sm-6 { width: calc(100% / 12 * 6); }
+        @media (min-width: 768px) { /* md breakpoint approx. */
+            .md-2 { width: calc(100% / 12 * 2); }
+            .md-3 { width: calc(100% / 12 * 3); }
+            .md-4 { width: calc(100% / 12 * 4); }
+            .md-6 { width: 50%; }
+        }
+        .align-items-center { align-items: center; }
+        .align-items-flex-end { align-items: flex-end; }
+        .justify-content-flex-end { justify-content: flex-end; }
+
+        /* Form elements (MUI TextField, Select like) */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.875rem;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .form-group input[disabled] {
+            background-color: #e9ecef;
+            opacity: 0.7;
+        }
+        .form-group .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        .form-group .checkbox-label input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto;
+        }
+
+        /* Buttons (MUI Button like) */
+        .button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease;
+            margin-left: 8px; /* spacing between buttons */
+        }
+        .button-primary {
+            background-color: #1976d2;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #1565c0;
+        }
+        .button-secondary {
+            background-color: #dc004e;
+            color: white;
+        }
+        .button-secondary:hover {
+            background-color: #b0003a;
+        }
+        .button-outlined {
+            background-color: transparent;
+            color: #1976d2;
+            border: 1px solid #1976d2;
+        }
+        .button-outlined:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+        .icon-button {
+            background: none;
+            border: none;
+            color: #757575;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+        }
+        .icon-button:hover {
+            background-color: rgba(0,0,0,0.08);
+            color: #dc004e; /* danger on hover for delete */
+        }
+        .button-add-item { margin-top: 10px; }
+
+        /* Table (MUI Table like) */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: 500;
+            color: #555;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .status-chip {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .status-yes { background-color: #e8f5e9; color: #2e7d32; } /* green */
+        .status-no { background-color: #ffebee; color: #c62828; } /* red */
+        .action-link {
+            color: #1976d2;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Product row styling */
+        .product-row {
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .product-row .grid-item:last-child { /* for delete button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal (Dialog) basic simulation */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; /* 10% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%; /* Could be more or less, depending on screen */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            position: relative;
+        }
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal h3 { margin-top: 0; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Подотчет</h1>
+
+    <div class="tabs">
+        <button class="tab-button active" onclick="showTab('tab1', this)">Сдать в подотчет</button>
+        <button class="tab-button" onclick="showTab('tab2', this)">Неподписанные документы</button>
+        <button class="tab-button" onclick="showTab('tab3', this)">Сданные и подписанные</button>
+    </div>
+
+    <!-- Вкладка 1: Сдать в подотчет -->
+    <div id="tab1" class="tab-content active">
+        <h2>Новый документ передачи в подотчет</h2>
+        <div class="grid-container">
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-company">Компания</label>
+                    <select id="sdat-company">
+                        <option value="">Выберите компанию</option>
+                        <option value="1">ООО "Рога и Копыта"</option>
+                        <option value="2">ИП "Василек"</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-warehouse">Склад</label>
+                    <select id="sdat-warehouse">
+                        <option value="">Выберите склад</option>
+                        <option value="s1">Основной склад</option>
+                        <option value="s2">Склад готовой продукции</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-employee">Сотрудник</label>
+                    <select id="sdat-employee">
+                        <option value="">Выберите сотрудника</option>
+                        <option value="e1">Иванов И.И.</option>
+                        <option value="e2">Петров П.П.</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-legal-entity">Юридическое лицо</label>
+                    <select id="sdat-legal-entity" onchange="updateManagerInfo(this.value)">
+                        <option value="">Выберите Юр. лицо</option>
+                        <option value="le1">ООО "Рога и Копыта" (ЮЛ1)</option>
+                        <option value="le2">ИП "Василек" (ЮЛ2)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-manager">Руководитель</label>
+                    <input type="text" id="sdat-manager" disabled>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-manager-phone">Телефон руководителя</label>
+                    <input type="text" id="sdat-manager-phone" disabled>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-6">
+                <div class="form-group">
+                    <label for="sdat-date">Дата документа</label>
+                    <input type="date" id="sdat-date" value="2023-10-27">
+                </div>
+            </div>
+        </div>
+
+        <h2>Товары к передаче</h2>
+        <div id="products-list">
+            <!-- Product row template (hidden) -->
+            <div id="product-row-template" class="product-row grid-container align-items-center" style="display: none;">
+                <div class="grid-item xs-12 sm-5">
+                    <div class="form-group">
+                        <label>Товар</label>
+                        <select class="product-selector">
+                            <option value="">Выберите товар</option>
+                            <option value="t1">Ноутбук ACER Aspire</option>
+                            <option value="t2">Монитор Samsung 24"</option>
+                            <option value="t3">Клавиатура Logitech</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid-item xs-12 sm-3">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="sn-checkbox" onchange="toggleSNFields(this)"> С указанием СН
+                        </label>
+                    </div>
+                </div>
+                <div class="grid-item xs-12 sm-3 sn-field" style="display: none;">
+                    <div class="form-group">
+                        <label>Серийный номер</label>
+                        <input type="text" placeholder="S/N">
+                    </div>
+                </div>
+                <div class="grid-item xs-12 sm-2 qty-field">
+                    <div class="form-group">
+                        <label>Количество</label>
+                        <input type="number" value="1" min="1">
+                    </div>
+                </div>
+                <div class="grid-item xs-12 sm-1">
+                    <button type="button" class="icon-button" onclick="removeProductRow(this)" title="Удалить товар">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- End Product row template -->
+        </div>
+        <button type="button" class="button button-outlined button-add-item" onclick="addProductRow()">+ Добавить товар</button>
+
+        <div class="grid-container justify-content-flex-end" style="margin-top: 20px;">
+            <div class="grid-item">
+                <button class="button button-primary">Сформировать Акт ПП</button>
+            </div>
+            <div class="grid-item">
+                <button class="button button-secondary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладка 2: Неподписанные документы -->
+    <div id="tab2" class="tab-content">
+        <h2>Список неподписанных документов</h2>
+        <div class="grid-container align-items-flex-end">
+            <div class="grid-item xs-12 md-3">
+                <div class="form-group">
+                    <label for="filter-uns-company">Компания</label>
+                    <select id="filter-uns-company">
+                        <option value="">Все компании</option>
+                        <option value="1">ООО "Рога и Копыта"</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-3">
+                <div class="form-group">
+                    <label for="filter-uns-warehouse">Склад</label>
+                    <select id="filter-uns-warehouse">
+                        <option value="">Все склады</option>
+                        <option value="s1">Основной склад</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 sm-6 md-2">
+                <div class="form-group">
+                    <label for="filter-uns-date-from">Период С</label>
+                    <input type="date" id="filter-uns-date-from">
+                </div>
+            </div>
+            <div class="grid-item xs-12 sm-6 md-2">
+                <div class="form-group">
+                    <label for="filter-uns-date-to">Период По</label>
+                    <input type="date" id="filter-uns-date-to">
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-2">
+                <div class="form-group">
+                    <button class="button button-outlined" style="width: 100%;">Применить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Компания</th>
+                    <th>Склад</th>
+                    <th>Сотрудник</th>
+                    <th>Дата</th>
+                    <th>Товары</th>
+                    <th>Подп. комп.</th>
+                    <th>Подп. сотр.</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>DOC-001</td>
+                    <td>ООО "Рога и Копыта"</td>
+                    <td>Основной склад</td>
+                    <td>Иванов И.И.</td>
+                    <td>2023-10-25</td>
+                    <td>Ноутбук (SN: 123), Мышь</td>
+                    <td><span class="status-chip status-no">Нет</span></td>
+                    <td><span class="status-chip status-yes">Да</span></td>
+                    <td><a href="#" class="action-link" onclick="openDocumentDetailModal('DOC-001', false)">Открыть</a></td>
+                </tr>
+                <tr>
+                    <td>DOC-002</td>
+                    <td>ИП "Василек"</td>
+                    <td>Склад ГП</td>
+                    <td>Петров П.П.</td>
+                    <td>2023-10-26</td>
+                    <td>Монитор Samsung</td>
+                    <td><span class="status-chip status-yes">Да</span></td>
+                    <td><span class="status-chip status-no">Нет</span></td>
+                    <td><a href="#" class="action-link" onclick="openDocumentDetailModal('DOC-002', true)">Открыть</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно для деталей документа (Вкладка 2) -->
+    <div id="documentDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeDocumentDetailModal()">×</span>
+            <h3 id="modalDocTitle">Детали документа</h3>
+            <p><strong>Компания:</strong> <span id="modalDocCompany"></span></p>
+            <p><strong>Склад:</strong> <span id="modalDocWarehouse"></span></p>
+            <p><strong>Сотрудник:</strong> <span id="modalDocEmployee"></span></p>
+            <p><strong>Дата:</strong> <span id="modalDocDate"></span></p>
+            <h4>Товары:</h4>
+            <ul id="modalDocProducts"></ul>
+            <div id="modalDocActions">
+                <button class="button button-primary">Подписать компанией</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Вкладка 3: Сданные и подписанные -->
+    <div id="tab3" class="tab-content">
+        <h2>Список сданных и подписанных ТМЦ</h2>
+        <div class="grid-container align-items-flex-end">
+            <div class="grid-item xs-12 md-4">
+                <div class="form-group">
+                    <label for="filter-sd-company">Компания</label>
+                    <select id="filter-sd-company">
+                        <option value="">Все компании</option>
+                        <option value="1">ООО "Рога и Копыта"</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-4">
+                <div class="form-group">
+                    <label for="filter-sd-warehouse">Склад</label>
+                    <select id="filter-sd-warehouse">
+                        <option value="">Все склады</option>
+                        <option value="s1">Основной склад</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12 md-4">
+                <div class="form-group">
+                    <label for="filter-sd-employee">Сотрудник</label>
+                    <select id="filter-sd-employee">
+                        <option value="">Все сотрудники</option>
+                        <option value="e1">Иванов И.И.</option>
+                        <option value="e2">Петров П.П.</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item xs-12">
+                <div class="form-group">
+                    <button class="button button-outlined" style="width: auto;">Применить</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Сотрудник</th>
+                    <th>Товар</th>
+                    <th>Общее кол-во</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Иванов И.И.</td>
+                    <td>Ноутбук ACER Aspire</td>
+                    <td>2</td>
+                    <td><a href="#" class="action-link" onclick="openSignedDetailModal('Иванов И.И.', 'Ноутбук ACER Aspire')">Детали</a></td>
+                </tr>
+                <tr>
+                    <td>Иванов И.И.</td>
+                    <td>Мышь беспроводная</td>
+                    <td>1</td>
+                    <td><a href="#" class="action-link" onclick="openSignedDetailModal('Иванов И.И.', 'Мышь беспроводная')">Детали</a></td>
+                </tr>
+                <tr>
+                    <td>Петров П.П.</td>
+                    <td>Монитор Samsung 24"</td>
+                    <td>1</td>
+                    <td><a href="#" class="action-link" onclick="openSignedDetailModal('Петров П.П.', 'Монитор Samsung 24')">Детали</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно для деталей сданных и подписанных (Вкладка 3) -->
+    <div id="signedDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSignedDetailModal()">×</span>
+            <h3 id="signedModalTitle">Детализация по товару</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Дата подотчета</th>
+                        <th>Количество</th>
+                        <th>СН (если есть)</th>
+                        <th>Акт ПП</th>
+                        <th>Документ</th>
+                    </tr>
+                    </thead>
+                    <tbody id="signedModalTableBody">
+                    <!-- Rows will be added by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Tab functionality
+    function showTab(tabId, buttonElement) {
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(button => button.classList.remove('active'));
+        buttonElement.classList.add('active');
+    }
+
+    // "Сдать в подотчет" tab functionality
+    function updateManagerInfo(legalEntityValue) {
+        const managerField = document.getElementById('sdat-manager');
+        const managerPhoneField = document.getElementById('sdat-manager-phone');
+        if (legalEntityValue === 'le1') {
+            managerField.value = 'Сидоров С.С.';
+            managerPhoneField.value = '+7 (900) 111-22-33';
+        } else if (legalEntityValue === 'le2') {
+            managerField.value = 'Кузнецов К.К.';
+            managerPhoneField.value = '+7 (900) 444-55-66';
+        } else {
+            managerField.value = '';
+            managerPhoneField.value = '';
+        }
+    }
+
+    function toggleSNFields(checkbox) {
+        const productRow = checkbox.closest('.product-row');
+        const snField = productRow.querySelector('.sn-field');
+        const qtyField = productRow.querySelector('.qty-field');
+        if (checkbox.checked) {
+            snField.style.display = 'block';
+            qtyField.style.display = 'none';
+            qtyField.querySelector('input').value = '';
+        } else {
+            snField.style.display = 'none';
+            snField.querySelector('input').value = '';
+            qtyField.style.display = 'block';
+            qtyField.querySelector('input').value = '1';
+        }
+    }
+
+    function addProductRow() {
+        const template = document.getElementById('product-row-template');
+        const clone = template.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.style.display = 'flex'; // or 'grid' if you use grid for product-row inner
+        document.getElementById('products-list').appendChild(clone);
+        // Re-initialize any event listeners if needed, or ensure they work with delegation
+    }
+
+    function removeProductRow(button) {
+        const productRow = button.closest('.product-row');
+        if (productRow && productRow.id !== 'product-row-template') { // don't remove template
+            productRow.remove();
+        }
+    }
+    // Initial product row for demonstration
+    document.addEventListener('DOMContentLoaded', () => {
+        addProductRow();
+    });
+
+
+    // "Неподписанные документы" tab functionality - Modal
+    const docDetailModal = document.getElementById('documentDetailModal');
+    function openDocumentDetailModal(docId, isCompanySigned) {
+        document.getElementById('modalDocTitle').innerText = `Детали документа ${docId}`;
+        // Dummy data based on docId - in real app this would be fetched
+        if (docId === 'DOC-001') {
+            document.getElementById('modalDocCompany').innerText = 'ООО "Рога и Копыта"';
+            document.getElementById('modalDocWarehouse').innerText = 'Основной склад';
+            document.getElementById('modalDocEmployee').innerText = 'Иванов И.И.';
+            document.getElementById('modalDocDate').innerText = '2023-10-25';
+            document.getElementById('modalDocProducts').innerHTML = '<li>Ноутбук (SN: 123) - 1 шт.</li><li>Мышь - 1 шт.</li>';
+        } else {
+            document.getElementById('modalDocCompany').innerText = 'ИП "Василек"';
+            document.getElementById('modalDocWarehouse').innerText = 'Склад ГП';
+            document.getElementById('modalDocEmployee').innerText = 'Петров П.П.';
+            document.getElementById('modalDocDate').innerText = '2023-10-26';
+            document.getElementById('modalDocProducts').innerHTML = '<li>Монитор Samsung - 1 шт.</li>';
+        }
+
+        const actionsDiv = document.getElementById('modalDocActions');
+        if (isCompanySigned) {
+            actionsDiv.style.display = 'none';
+        } else {
+            actionsDiv.style.display = 'block';
+        }
+        docDetailModal.style.display = "block";
+    }
+    function closeDocumentDetailModal() {
+        docDetailModal.style.display = "none";
+    }
+
+
+    // "Сданные и подписанные" tab functionality - Modal
+    const signedDetailModal = document.getElementById('signedDetailModal');
+    function openSignedDetailModal(employeeName, productName) {
+        document.getElementById('signedModalTitle').innerText = `Детализация: ${productName} (Сотрудник: ${employeeName})`;
+        const tableBody = document.getElementById('signedModalTableBody');
+        tableBody.innerHTML = ''; // Clear previous data
+
+        // Dummy data - in real app this would be fetched
+        let details = [];
+        if (employeeName === 'Иванов И.И.' && productName === 'Ноутбук ACER Aspire') {
+            details = [
+                { date: '2023-10-01', qty: 1, sn: 'SNXYZ123', actLink: '#act1', docLink: '#doc1' },
+                { date: '2023-10-15', qty: 1, sn: 'SNABC789', actLink: '#act2', docLink: '#doc2' }
+            ];
+        } else if (employeeName === 'Иванов И.И.' && productName === 'Мышь беспроводная') {
+            details = [
+                { date: '2023-10-05', qty: 1, sn: '', actLink: '#act3', docLink: '#doc3' }
+            ];
+        } else if (employeeName === 'Петров П.П.') {
+            details = [
+                { date: '2023-09-20', qty: 1, sn: 'SNMON456', actLink: '#act4', docLink: '#doc4' }
+            ];
+        }
+
+        details.forEach(d => {
+            const row = `<tr>
+                                <td>${d.date}</td>
+                                <td>${d.qty}</td>
+                                <td>${d.sn || '-'}</td>
+                                <td><a href="${d.actLink}" class="action-link" target="_blank">Акт</a></td>
+                                <td><a href="${d.docLink}" class="action-link" target="_blank">Документ</a></td>
+                             </tr>`;
+            tableBody.innerHTML += row;
+        });
+        signedDetailModal.style.display = "block";
+    }
+    function closeSignedDetailModal() {
+        signedDetailModal.style.display = "none";
+    }
+
+    // Close modal if clicked outside of it
+    window.onclick = function(event) {
+        if (event.target == docDetailModal) {
+            closeDocumentDetailModal();
+        }
+        if (event.target == signedDetailModal) {
+            closeSignedDetailModal();
+        }
+    }
+
+</script>
+
+</body>
+</html>

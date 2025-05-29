@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Возврат из подотчета - Макет v3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #333;
+            padding: 20px;
+        }
+
+        .mui-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .mui-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .mui-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            margin-right: 5px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .mui-tab.active {
+            color: #1976d2;
+            border-bottom: 2px solid #1976d2;
+            font-weight: bold;
+        }
+
+        .mui-tab-panel {
+            display: none;
+        }
+
+        .mui-tab-panel.active {
+            display: block;
+        }
+
+        .mui-grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+        }
+
+        .mui-grid-item {
+            flex-grow: 1;
+            min-width: 180px;
+        }
+
+        .mui-form-control {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .mui-form-control label {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #555;
+        }
+
+        .mui-input, .mui-select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .mui-input[type="date"] {
+            padding: 8px;
+        }
+
+        .mui-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            line-height: 1.5;
+        }
+        .mui-button-small {
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+
+        .mui-button-primary {
+            background-color: #1976d2;
+            color: white;
+        }
+        .mui-button-primary:hover {
+            background-color: #155a9e;
+        }
+        .mui-button-primary:disabled {
+            background-color: #b0bec5;
+            color: #78909c;
+            cursor: not-allowed;
+        }
+
+
+        .mui-button-outlined {
+            background-color: transparent;
+            color: #1976d2;
+            border: 1px solid #1976d2;
+        }
+        .mui-button-outlined:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+
+        .mui-table-container {
+            overflow-x: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .mui-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .mui-table th, .mui-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+        }
+
+        .mui-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .mui-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .mui-table tbody tr.clickable:hover {
+            background-color: #e3f2fd;
+            cursor: pointer;
+        }
+
+        .mui-input[type="number"] {
+            width: 70px;
+            padding: 8px;
+        }
+        .mui-input[disabled] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        .mui-table .mui-input[type="date"] {
+            min-width: 130px;
+        }
+
+
+        .feedback-message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            display: none;
+        }
+        .feedback-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+        .feedback-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .details-section {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        .details-section h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .details-section p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="mui-container">
+    <h1 class="section-title">Возврат из подотчета</h1>
+
+    <div class="mui-tabs">
+        <button class="mui-tab active" data-tab="tab-return- оформление">Оформление возврата на склад</button>
+        <button class="mui-tab" data-tab="tab-return-list">Список документов возврата</button>
+    </div>
+
+    <!-- Вкладка 1: Оформление возврата на склад -->
+    <div id="tab-return- оформление" class="mui-tab-panel active">
+        <div class="mui-grid-container">
+            <div class="mui-grid-item">
+                <div class="mui-form-control">
+                    <label for="company-select-1">Компания</label>
+                    <select id="company-select-1" class="mui-select">
+                        <option value="">Не выбрано</option>
+                        <option value="1">ООО "Ромашка"</option>
+                        <option value="2">ИП "Василек"</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mui-grid-item">
+                <div class="mui-form-control">
+                    <label for="warehouse-select-1">Склад</label>
+                    <select id="warehouse-select-1" class="mui-select">
+                        <option value="">Не выбрано</option>
+                        <option value="s1">Основной склад</option>
+                        <option value="s2">Склад материалов</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mui-grid-item">
+                <div class="mui-form-control">
+                    <label for="employee-select">Сотрудник</label>
+                    <select id="employee-select" class="mui-select">
+                        <option value="">Не выбрано</option>
+                        <option value="e1">Иванов Иван Иванович</option>
+                        <option value="e2">Петров Петр Петрович</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mui-grid-item">
+                <button id="applyFiltersItemsButton" class="mui-button mui-button-outlined" style="width: auto; padding-left: 20px; padding-right: 20px;">Применить</button>
+            </div>
+        </div>
+
+        <div id="returnFeedbackMessage" class="feedback-message" style="margin-bottom: 15px;"></div>
+
+        <div class="mui-table-container">
+            <table class="mui-table" id="itemsToReturnTable">
+                <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Кол-во (на сотруднике)</th>
+                    <th>СН</th>
+                    <th>Кол-во к возврату</th>
+                    <th>Ед. изм.</th>
+                    <th>Дата возврата</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-item-id="item1" data-item-name="Ноутбук ACER Aspire">
+                    <td>Ноутбук ACER Aspire</td>
+                    <td class="on-employee-qty">1</td>
+                    <td class="serial-number">SN12345XYZ</td>
+                    <td><input type="number" class="mui-input return-qty" value="1" min="0" max="1" data-sn="SN12345XYZ"></td>
+                    <td>шт.</td>
+                    <td><input type="date" class="mui-input return-date"></td>
+                    <td><button class="mui-button mui-button-primary mui-button-small submit-row-return">Оформить</button></td>
+                </tr>
+                <tr data-item-id="item2" data-item-name="Мышь Logitech M185">
+                    <td>Мышь Logitech M185</td>
+                    <td class="on-employee-qty">3</td>
+                    <td class="serial-number"></td>
+                    <td><input type="number" class="mui-input return-qty" value="0" min="0" max="3"></td>
+                    <td>шт.</td>
+                    <td><input type="date" class="mui-input return-date"></td>
+                    <td><button class="mui-button mui-button-primary mui-button-small submit-row-return">Оформить</button></td>
+                </tr>
+                <tr data-item-id="item3" data-item-name="Клавиатура A4Tech">
+                    <td>Клавиатура A4Tech</td>
+                    <td class="on-employee-qty">2</td>
+                    <td class="serial-number"></td>
+                    <td><input type="number" class="mui-input return-qty" value="0" min="0" max="2"></td>
+                    <td>шт.</td>
+                    <td><input type="date" class="mui-input return-date"></td>
+                    <td><button class="mui-button mui-button-primary mui-button-small submit-row-return">Оформить</button></td>
+                </tr>
+                <tr data-item-id="item4" data-item-name="Монитор Samsung 24"">
+                <td>Монитор Samsung 24"</td>
+                <td class="on-employee-qty">1</td>
+                <td class="serial-number">SNMONITOR001</td>
+                <td><input type="number" class="mui-input return-qty" value="1" min="0" max="1" data-sn="SNMONITOR001"></td>
+                <td>шт.</td>
+                <td><input type="date" class="mui-input return-date"></td>
+                <td><button class="mui-button mui-button-primary mui-button-small submit-row-return">Оформить</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Вкладка 2: Список документов возврата -->
+    <div id="tab-return-list" class="mui-tab-panel">
+        <div class="mui-grid-container">
+            <!-- Поле "Поиск по документу" УДАЛЕНО -->
+            <div class="mui-grid-item">
+                <div class="mui-form-control">
+                    <label for="company-select-2">Компания</label>
+                    <select id="company-select-2" class="mui-select">
+                        <option value="">Не выбрано</option>
+                        <option value="1">ООО "Ромашка"</option>
+                        <option value="2">ИП "Василек"</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mui-grid-item">
+                <div class="mui-form-control">
+                    <label for="warehouse-select-2">Склад</label>
+                    <select id="warehouse-select-2" class="mui-select">
+                        <option value="">Не выбрано</option>
+                        <option value="s1">Основной склад</option>
+                        <option value="s2">Склад материалов</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mui-grid-item" style="max-width: 220px;">
+                <div class="mui-form-control">
+                    <label for="period-start">Период с</label>
+                    <input type="date" id="period-start" class="mui-input">
+                </div>
+            </div>
+            <div class="mui-grid-item" style="max-width: 220px;">
+                <div class="mui-form-control">
+                    <label for="period-end">Период по</label>
+                    <input type="date" id="period-end" class="mui-input">
+                </div>
+            </div>
+            <div class="mui-grid-item">
+                <button id="applyDocFiltersButton" class="mui-button mui-button-outlined">Применить фильтры</button>
+            </div>
+        </div>
+
+        <div class="mui-table-container">
+            <table class="mui-table">
+                <thead>
+                <tr>
+                    <th>№ Документа</th>
+                    <th>Дата документа</th>
+                    <th>Сотрудник</th>
+                    <th>Склад</th>
+                    <th>Компания</th>
+                    <th>Кол-во позиций</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="clickable" data-doc-id="RV001">
+                    <td>ВРН-000123</td>
+                    <td>2024-07-28</td>
+                    <td>Иванов Иван Иванович</td>
+                    <td>Основной склад</td>
+                    <td>ООО "Ромашка"</td>
+                    <td>2</td>
+                    <td>Проведен</td>
+                </tr>
+                <tr class="clickable" data-doc-id="RV002">
+                    <td>ВРН-000124</td>
+                    <td>2024-07-29</td>
+                    <td>Петров Петр Петрович</td>
+                    <td>Склад материалов</td>
+                    <td>ИП "Василек"</td>
+                    <td>1</td>
+                    <td>Проведен</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="documentDetailsSection" class="details-section" style="display: none;">
+            <h3 id="detailsDocTitle">Детали документа возврата №</h3>
+            <p><strong>Дата создания:</strong> <span id="detailsDateCreated"></span></p>
+            <p><strong>Кем создан:</strong> <span id="detailsUserCreated"></span></p>
+            <p><strong>Дата изменения:</strong> <span id="detailsDateModified"></span></p>
+            <p><strong>Кем изменен:</strong> <span id="detailsUserModified"></span></p>
+            <p><strong>Сотрудник:</strong> <span id="detailsEmployee"></span></p>
+            <p><strong>Склад:</strong> <span id="detailsWarehouse"></span></p>
+            <p><strong>Компания:</strong> <span id="detailsCompany"></span></p>
+
+            <h4>Возвращенные товары:</h4>
+            <div class="mui-table-container">
+                <table class="mui-table" id="detailsItemsTable">
+                    <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>СН</th>
+                        <th>Возвращено кол-во</th>
+                        <th>Ед. изм.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Сюда будут динамически добавляться строки товаров -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="action-button-container" style="justify-content: flex-start; margin-top:10px;">
+                <button id="closeDetailsButton" class="mui-button mui-button-outlined">Закрыть детали</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Логика переключения вкладок
+        const tabs = document.querySelectorAll('.mui-tab');
+        const tabPanels = document.querySelectorAll('.mui-tab-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const targetPanelId = tab.getAttribute('data-tab');
+                tabPanels.forEach(panel => {
+                    if (panel.id === targetPanelId) {
+                        panel.classList.add('active');
+                    } else {
+                        panel.classList.remove('active');
+                    }
+                });
+                document.getElementById('documentDetailsSection').style.display = 'none';
+                document.getElementById('returnFeedbackMessage').style.display = 'none';
+            });
+        });
+
+        // --- Логика для Вкладки 1: Оформление возврата ---
+        const returnFeedbackMessage = document.getElementById('returnFeedbackMessage');
+        const applyFiltersItemsButton = document.getElementById('applyFiltersItemsButton');
+
+        if (applyFiltersItemsButton) {
+            applyFiltersItemsButton.addEventListener('click', () => {
+                returnFeedbackMessage.className = 'feedback-message';
+                returnFeedbackMessage.textContent = 'Симуляция: Товары для сотрудника загружены/отфильтрованы.';
+                returnFeedbackMessage.style.display = 'block';
+                setTimeout(() => { returnFeedbackMessage.style.display = 'none'; }, 3000);
+                initializeItemRowLogic();
+            });
+        }
+
+        function initializeItemRowLogic() {
+            const itemRows = document.querySelectorAll('#itemsToReturnTable tbody tr');
+            itemRows.forEach(row => {
+                const qtyInput = row.querySelector('.return-qty');
+                const dateInput = row.querySelector('.return-date');
+                const submitButton = row.querySelector('.submit-row-return');
+                const maxVal = parseInt(qtyInput.getAttribute('max'));
+                const itemName = row.dataset.itemName || 'товар';
+
+                if (qtyInput.dataset.sn) {
+                    qtyInput.value = "1";
+                    qtyInput.disabled = true;
+                } else {
+                    qtyInput.value = "0";
+                }
+
+                function validateRow() {
+                    const qtyValue = parseInt(qtyInput.value);
+                    const dateValue = dateInput.value;
+                    let isValid = true;
+
+                    if (isNaN(qtyValue) || qtyValue <= 0) isValid = false; // Проверка на NaN
+                    if (!dateValue) isValid = false;
+
+                    if (!isNaN(qtyValue) && qtyValue > maxVal) {
+                        qtyInput.value = maxVal;
+                    }
+                    if (!isNaN(qtyValue) && qtyValue < 0) {
+                        qtyInput.value = 0;
+                    }
+                    submitButton.disabled = !isValid;
+                }
+
+                qtyInput.addEventListener('input', validateRow);
+                dateInput.addEventListener('change', validateRow);
+                validateRow();
+
+                if (submitButton) {
+                    submitButton.addEventListener('click', () => {
+                        const companySelected = document.getElementById('company-select-1').value;
+                        const warehouseSelected = document.getElementById('warehouse-select-1').value;
+                        const employeeSelected = document.getElementById('employee-select').value;
+
+                        if (!companySelected || !warehouseSelected || !employeeSelected) {
+                            returnFeedbackMessage.className = 'feedback-message error';
+                            returnFeedbackMessage.textContent = 'Ошибка: Не выбраны Компания, Склад или Сотрудник в шапке!';
+                            returnFeedbackMessage.style.display = 'block';
+                        } else {
+                            returnFeedbackMessage.className = 'feedback-message success';
+                            returnFeedbackMessage.textContent = `Возврат по товару "${itemName}" (кол-во: ${qtyInput.value}) на дату ${dateInput.value} успешно оформлен (симуляция).`;
+                            returnFeedbackMessage.style.display = 'block';
+                        }
+                        setTimeout(() => { returnFeedbackMessage.style.display = 'none'; }, 5000);
+                    });
+                }
+            });
+        }
+        initializeItemRowLogic();
+
+
+        // --- Логика для Вкладки 2: Список документов возврата ---
+        // Кнопка "Применить фильтры" для списка документов (симуляция)
+        const applyDocFiltersButton = document.getElementById('applyDocFiltersButton');
+        if (applyDocFiltersButton) {
+            applyDocFiltersButton.addEventListener('click', () => {
+                // Просто покажем сообщение, т.к. реальной фильтрации нет
+                alert('Симуляция: Фильтры применены, список документов должен обновиться.');
+                // Здесь в реальном приложении был бы запрос к бэкенду и обновление таблицы
+            });
+        }
+
+        const clickableRows = document.querySelectorAll('#tab-return-list .mui-table tbody tr.clickable');
+        const detailsSection = document.getElementById('documentDetailsSection');
+        const closeDetailsButton = document.getElementById('closeDetailsButton');
+
+        const sampleDocDetails = {
+            "RV001": {
+                docNumber: "ВРН-000123",
+                dateCreated: "2024-07-28 10:00:00",
+                userCreated: "Admin",
+                dateModified: "2024-07-28 10:05:00",
+                userModified: "Admin",
+                employee: "Иванов Иван Иванович",
+                warehouse: "Основной склад",
+                company: "ООО \"Ромашка\"",
+                items: [
+                    { name: "Ноутбук ACER Aspire", sn: "SN12345XYZ", qty: 1, unit: "шт." },
+                    { name: "Мышь Logitech M185", sn: "", qty: 1, unit: "шт." }
+                ]
+            },
+            "RV002": {
+                docNumber: "ВРН-000124",
+                dateCreated: "2024-07-29 11:30:00",
+                userCreated: "Manager1",
+                dateModified: "2024-07-29 11:30:00",
+                userModified: "Manager1",
+                employee: "Петров Петр Петрович",
+                warehouse: "Склад материалов",
+                company: "ИП \"Василек\"",
+                items: [
+                    { name: "Монитор Samsung 24\"", sn: "SNMONITOR001", qty: 1, unit: "шт." }
+                ]
+            }
+        };
+
+        clickableRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const docId = row.dataset.docId;
+                const details = sampleDocDetails[docId] || {
+                    docNumber: docId,
+                    dateCreated: "N/A", userCreated: "N/A", dateModified: "N/A", userModified: "N/A",
+                    employee: "N/A", warehouse: "N/A", company: "N/A", items: []
+                };
+
+                if (details) {
+                    document.getElementById('detailsDocTitle').textContent = `Детали документа возврата № ${details.docNumber}`;
+                    document.getElementById('detailsDateCreated').textContent = details.dateCreated;
+                    document.getElementById('detailsUserCreated').textContent = details.userCreated;
+                    document.getElementById('detailsDateModified').textContent = details.dateModified;
+                    document.getElementById('detailsUserModified').textContent = details.userModified;
+                    document.getElementById('detailsEmployee').textContent = details.employee;
+                    document.getElementById('detailsWarehouse').textContent = details.warehouse;
+                    document.getElementById('detailsCompany').textContent = details.company;
+
+                    const itemsTableBody = document.querySelector('#detailsItemsTable tbody');
+                    itemsTableBody.innerHTML = '';
+                    if (details.items && details.items.length > 0) {
+                        details.items.forEach(item => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                    <td>${item.name}</td>
+                                    <td>${item.sn || '-'}</td>
+                                    <td>${item.qty}</td>
+                                    <td>${item.unit}</td>
+                                `;
+                            itemsTableBody.appendChild(tr);
+                        });
+                    } else {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td colspan="4" style="text-align:center;">Нет данных о товарах</td>`;
+                        itemsTableBody.appendChild(tr);
+                    }
+                    detailsSection.style.display = 'block';
+                }
+            });
+        });
+
+        if (closeDetailsButton) {
+            closeDetailsButton.addEventListener('click', () => {
+                detailsSection.style.display = 'none';
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>
